@@ -36,11 +36,15 @@ function countdown(target, now = Date.now()) {
   return { text: seconds < 0 ? `${parts} ago` : parts, overdue: seconds < 0, seconds };
 }
 
-function ago(seconds) {
-  if (seconds === null || seconds === undefined) return "never";
-  if (seconds < 60) return `${seconds}s ago`;
+function duration(seconds) {
+  if (seconds === null || seconds === undefined) return "an unknown time";
+  if (seconds < 60) return `${seconds}s`;
   const m = Math.floor(seconds / 60);
-  return m < 60 ? `${m}m ago` : `${Math.floor(m / 60)}h ago`;
+  return m < 60 ? `${m}m` : `${Math.floor(m / 60)}h`;
+}
+
+function ago(seconds) {
+  return seconds === null || seconds === undefined ? "never" : `${duration(seconds)} ago`;
 }
 
 function toast(message, ms = 3600) {
@@ -56,6 +60,12 @@ function toast(message, ms = 3600) {
 }
 
 async function api(path, options = {}) {
+  // The published walkthrough has no backend to call: replay.js installs
+  // window.__REPLAY__ and serves payloads recorded from the real engine. This
+  // one branch is the only difference between the two, so everything below --
+  // every render function, every rule of CSS -- stays a single copy that
+  // cannot drift out of step with the live dashboard.
+  if (window.__REPLAY__) return window.__REPLAY__.handle(path, options);
   const response = await fetch(path, { headers: { "Content-Type": "application/json" }, ...options });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) throw new Error(body.detail || `${response.status} ${response.statusText}`);
@@ -84,7 +94,8 @@ function renderAgent(agent) {
       `Last checked for unanswered cover ${ago(agent.seconds_since_sweep)} · next sweep in ${next}s`;
   } else if (agent.status === "stalled") {
     $("hero-sub").textContent =
-      `No check for ${ago(agent.seconds_since_sweep)}. The background scheduler has probably stopped.`;
+      `No check for ${duration(agent.seconds_since_sweep)}. ` +
+      "The background scheduler has probably stopped.";
   } else {
     $("hero-sub").textContent = "Waiting for the first sweep.";
   }
@@ -310,6 +321,10 @@ async function refresh() {
     $("nav-pill-text").textContent = "Offline";
   }
 }
+
+// The published walkthrough adds controls of its own (see replay.js) and needs
+// to repaint immediately rather than wait out the poll interval.
+window.__dashboardRefresh = refresh;
 
 /* ---------- interaction ---------- */
 
