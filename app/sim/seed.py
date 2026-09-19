@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo
 
 from sqlalchemy.orm import Session
 
+from app.clock import to_local
 from app.models.coverage import CoverageOffer, CoverageRequest
 from app.models.employee import AvailabilityWindow, Employee, EmployeeSkill, Skill
 from app.models.enums import (
@@ -40,6 +41,39 @@ def at(hour: int, minute: int = 0, *, day: date = SIM_DATE, tz: str = SIM_TZ) ->
     return local.astimezone(UTC).replace(tzinfo=None)
 
 
+#: The moment the scenarios treat as "now" -- 45 minutes before the driver.
+ANCHOR = (14, 5)
+
+
+class Timeline:
+    """Maps the simulation's wall-clock day onto a real moment.
+
+    The printed scenarios want a fixed, readable day so the output is the same
+    every run.  The dashboard demo wants that same day to be happening *now*,
+    so its countdowns tick and the driver really is arriving in 45 minutes.
+    One offset serves both.
+    """
+
+    def __init__(
+        self, anchor: datetime | None = None, day: date = SIM_DATE, tz: str = SIM_TZ
+    ) -> None:
+        self.day = day
+        self.tz = tz
+        self.offset = timedelta(0)
+        if anchor is not None:
+            self.offset = anchor - self._raw(*ANCHOR, day=day)
+
+    def _raw(self, hour: int, minute: int = 0, *, day: date | None = None) -> datetime:
+        target = day or self.day
+        local = datetime(
+            target.year, target.month, target.day, hour, minute, tzinfo=ZoneInfo(self.tz)
+        )
+        return local.astimezone(UTC).replace(tzinfo=None)
+
+    def at(self, hour: int, minute: int = 0, *, day: date | None = None) -> datetime:
+        return self._raw(hour, minute, day=day) + self.offset
+
+
 @dataclass
 class World:
     employees: dict[str, Employee] = field(default_factory=dict)
@@ -47,20 +81,36 @@ class World:
     orders: dict[str, Order] = field(default_factory=dict)
     tasks: dict[str, Task] = field(default_factory=dict)
     shift: Shift | None = None
+    timeline: Timeline | None = None
 
     def employee_id(self, key: str) -> int:
         return self.employees[key].id
 
 
-def seed_kitchen(session: Session, *, on_shift_packer: bool = True) -> World:
+def seed_kitchen(
+    session: Session,
+    *,
+    on_shift_packer: bool = True,
+    anchor: datetime | None = None,
+    tz: str = SIM_TZ,
+) -> World:
     """Build the kitchen.
 
     ``on_shift_packer`` is the single switch the scenarios turn.  With it on,
     somebody already at work can take over and the system never has to
     interrupt anyone's day off.  With it off, the only way to get the order
     out is to ring round.
+
+    ``anchor`` slides the whole day so that the scenarios' "now" lands on a
+    real moment -- which is what the dashboard demo needs to show live
+    countdowns.  Left out, the fixed simulation day is used.  ``tz`` must match
+    the running service's business timezone, since that is the clock the
+    availability guardrail reads.
     """
     world = World()
+    timeline = Timeline(anchor, tz=tz)
+    at = timeline.at  # noqa: A001 -- deliberately shadows the module helper
+    world.timeline = timeline
 
     for code, name in [
         ("prep", "Food prep"),
@@ -109,10 +159,18 @@ def seed_kitchen(session: Session, *, on_shift_packer: bool = True) -> World:
 
     # The three off-shift packers are all willing to be called in on a Monday
     # daytime. Whether they *may* be is what the guardrails decide.
+    # The weekday has to be derived from the day actually being seeded, in the
+    # timezone the guardrail will read it in. Hard-coding it broke the moment
+    # the demo anchored the kitchen to a real "now" on a different weekday --
+    # everybody silently became unavailable and every order escalated.
+    call_in_weekday = to_local(at(14, 15), tz).weekday()
     for employee in (luis, sam, tomas):
         session.add(
             AvailabilityWindow(
-                employee_id=employee.id, weekday=4, start_minute=8 * 60, end_minute=22 * 60
+                employee_id=employee.id,
+                weekday=call_in_weekday,
+                start_minute=8 * 60,
+                end_minute=22 * 60,
             )
         )
 
@@ -249,12 +307,12 @@ def seed_kitchen(session: Session, *, on_shift_packer: bool = True) -> World:
         station="Pass",
     )
 
-    _seed_cover_history(session, world)
+    _seed_cover_history(session, world, at)
     session.commit()
     return world
 
 
-def _seed_cover_history(session: Session, world: World) -> None:
+def _seed_cover_history(session: Session, world: World, at) -> None:
     """Sam covered twice recently.
 
     Fairness is a scoring input, not a guardrail: it does not stop Sam being
