@@ -20,15 +20,41 @@ The scenario the whole design is built around:
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"
 
-# Watch it decide, against a seeded kitchen. Nothing is sent, nothing is saved.
-.venv/bin/python -m app.sim.scenario
-
-# Or run the service and poke at it via the interactive docs at /docs
+# The dashboard. Open http://localhost:8000 and press "Load kitchen".
 .venv/bin/uvicorn app.main:app --reload
+
+# Or watch it decide in the terminal, with no server at all.
+.venv/bin/python -m app.sim.scenario
 ```
 
 Out of the box `DRY_RUN=true` and no Slack token is set, so every message is
 logged instead of delivered. Copy `.env.example` to `.env` to change anything.
+
+## The dashboard
+
+`http://localhost:8000` answers one question before anything else: **is the
+agent actually working?** The heartbeat is read from the database rather than
+from the process serving the page, because the scheduler may not be that
+process — so "active" means the sweep really ran, not that the web server is
+up. Miss three sweeps and it says *stalled*, which is the honest word for it.
+
+Below that: today's decision counts, anything waiting on a manager, cover
+requests in flight with a live countdown to escalation, the job board, the
+decision feed with the reasons people were ruled out, and every person's hours
+against the limits the agent enforces.
+
+In dry run a demo bar appears. **Load kitchen** wipes the database and lays out
+six staff, a lunch shift and three orders timed to the current moment — the
+driver really is arriving in 45 minutes. **Mai requests leave** then sets the
+engine off, and the feed fills up in front of you. Pick *Nobody on shift* first
+and you can accept or decline the cover request from the page and watch the job
+move. The demo refuses to run unless `DRY_RUN` is on: it deletes data, and dry
+run is the only configuration where that is a sandbox rather than a roster.
+
+The page is plain HTML, CSS and JavaScript with no build step — a page whose
+job is to prove the backend runs is a poor place for a toolchain of its own.
+It follows the system font stack and colours, and takes light or dark from the
+OS.
 
 ## What the simulation shows
 
@@ -151,6 +177,8 @@ Two reply paths:
 | `GET /coverage`, `GET /coverage/respond?token=…`, `POST /coverage/{id}/reply` | Cover requests and replies |
 | `POST /coverage/sweep` | Run the timeout checks now |
 | `GET /decisions`, `POST /decisions/{id}/override` | Audit log and manager override |
+| `GET /api/dashboard` | Everything the dashboard shows, in one payload |
+| `POST /api/demo/reset`, `POST /api/demo/leave` | Load and run the demo (dry run only) |
 
 A background sweep (`app/scheduler.py`, every 60s) widens the search when a
 request times out and escalates when the pickup gets close, because silence
@@ -159,7 +187,7 @@ looks exactly like everything being fine.
 ## Testing
 
 ```bash
-.venv/bin/python -m pytest        # 87 tests
+.venv/bin/python -m pytest        # 108 tests
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
 ```
 
@@ -182,10 +210,11 @@ app/models/         SQLAlchemy models, including the audit trail
 app/api/            FastAPI routers
 app/notifications/  Notifier protocol, Slack and console implementations
 app/sim/            seeded kitchen and the three scenarios
+app/web/            the dashboard: index.html, styles.css, app.js
 ```
 
 ## Not in this version
 
-No web dashboard, no payroll, no multi-site or cross-timezone rostering, and
-SQLite rather than a production database. Times are stored as naive UTC and
+No payroll, no authentication on the dashboard, no multi-site or cross-timezone
+rostering, and SQLite rather than a production database. Times are stored as naive UTC and
 rendered in a single configured business timezone.
