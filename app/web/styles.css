@@ -33,8 +33,17 @@
   --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
+/* Dark theme.
+
+   Three states have to be covered, not two: an explicit choice stamps
+   data-theme on the root element, and the common "follow the system" setting
+   stamps nothing at all -- there, only prefers-color-scheme separates the two.
+   So the media query is guarded (an explicit light choice must beat a dark OS)
+   and the stamped selector repeats the tokens so the toggle wins both ways.
+   The duplication is the price of covering the unstamped state; CSS has no
+   way to share one token block between the two selectors. */
+
+:root[data-theme="dark"] {
     --bg: #000000;
     --surface: #1c1c1e;
     --surface-2: #2c2c2e;
@@ -55,6 +64,32 @@
     --red: #ff453a;
     --red-bright: #ff453a;
     --purple: #a78bfa;
+  
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #000000;
+    --surface: #1c1c1e;
+    --surface-2: #2c2c2e;
+    --surface-3: #3a3a3c;
+    --text: #f5f5f7;
+    --text-2: #a1a1a6;
+    --text-3: #8e8e93;
+    --separator: rgba(255, 255, 255, 0.1);
+    --nav-bg: rgba(22, 22, 23, 0.72);
+    --shadow: none;
+
+    --blue: #0a84ff;
+    --blue-hover: #409cff;
+    --green: #30d158;
+    --green-bright: #30d158;
+    --orange: #ff9f0a;
+    --orange-bright: #ff9f0a;
+    --red: #ff453a;
+    --red-bright: #ff453a;
+    --purple: #a78bfa;
+  
   }
 }
 
@@ -89,7 +124,9 @@ dl, dd, dt { margin: 0; }
 
 .nav {
   position: sticky;
-  top: 0;
+  /* Not 0: on a phone the status bar sits above the page, and the publish
+     skeleton pads the root by the safe-area inset. */
+  top: env(safe-area-inset-top, 0px);
   z-index: 40;
   background: var(--nav-bg);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
