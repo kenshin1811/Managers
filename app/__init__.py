@@ -1,0 +1,1 @@
+"""Automated employee management system."""
