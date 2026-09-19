@@ -15,6 +15,8 @@ from app import runtime
 from app.config import Settings
 from app.db import session_scope
 from app.engine import coverage as coverage_engine
+from app.models.state import SWEEP_HEARTBEAT
+from app.state import touch
 
 logger = logging.getLogger("managers.scheduler")
 
@@ -31,6 +33,9 @@ def run_sweep(settings: Settings, session_factory=None) -> int:
     notifier = runtime.notifier(settings)
     with session_scope(session_factory) as session:
         records = coverage_engine.sweep_open_requests(session, notifier, settings, now)
+        # Recorded even on a quiet pass: "nothing to do" and "not running" look
+        # identical from the outside, and only one of them is fine.
+        touch(session, SWEEP_HEARTBEAT, now, value=str(len(records)))
         if records:
             logger.info("coverage sweep acted on %d request(s)", len(records))
         return len(records)

@@ -17,6 +17,7 @@ from app.models.enums import (
 from app.models.leave import LeaveRequest
 from app.models.order import Order
 from app.models.shift import Shift, ShiftAssignment
+from app.models.state import SystemState
 from app.models.task import Task
 from app.models.timeclock import TimeEntry
 
@@ -39,6 +40,7 @@ __all__ = [
     "ShiftAssignment",
     "ShiftAssignmentStatus",
     "Skill",
+    "SystemState",
     "Task",
     "TaskPriority",
     "TaskStatus",

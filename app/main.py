@@ -4,13 +4,28 @@ from __future__ import annotations
 
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
-from app.api import coverage, decisions, employees, leave, schedule, slack, timeclock
+from app.api import (
+    coverage,
+    dashboard,
+    decisions,
+    demo,
+    employees,
+    leave,
+    schedule,
+    slack,
+    timeclock,
+)
 from app.config import get_settings
 from app.db import create_all
-from app.scheduler import build_scheduler
+from app.scheduler import build_scheduler, run_sweep
+
+WEB_DIR = Path(__file__).parent / "web"
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger("managers")
@@ -29,6 +44,13 @@ manager can read and reverse.
 async def lifespan(app: FastAPI):
     settings = get_settings()
     create_all()
+    # One sweep on boot, before the interval starts: anything that fell due
+    # while the service was down is overdue now, not in sixty seconds. It also
+    # means the dashboard has a heartbeat to show immediately.
+    try:
+        run_sweep(settings)
+    except Exception:  # pragma: no cover - never let a sweep stop the service
+        logger.exception("startup sweep failed")
     scheduler = build_scheduler(settings)
     scheduler.start()
     logger.info(
@@ -51,8 +73,24 @@ def create_app() -> FastAPI:
         version="0.1.0",
         lifespan=lifespan,
     )
-    for module in (employees, schedule, timeclock, leave, coverage, decisions, slack):
+    for module in (
+        employees,
+        schedule,
+        timeclock,
+        leave,
+        coverage,
+        decisions,
+        slack,
+        dashboard,
+        demo,
+    ):
         app.include_router(module.router)
+
+    app.mount("/static", StaticFiles(directory=WEB_DIR), name="static")
+
+    @app.get("/", include_in_schema=False)
+    def home() -> FileResponse:
+        return FileResponse(WEB_DIR / "index.html")
 
     @app.get("/health", tags=["meta"])
     def health() -> dict:
