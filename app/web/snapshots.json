@@ -1,0 +1,6462 @@
+{
+ "business_tz": "America/New_York",
+ "frames": {
+  "callin.0": {
+   "_caption": "Same kitchen, but nobody on shift is signed off on packing.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:04",
+     "local_full": "Fri 25 Sep, 14:04",
+     "utc": "2026-09-25T18:04:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:05",
+     "local_full": "Fri 25 Sep, 14:05",
+     "utc": "2026-09-25T18:05:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 0,
+    "coverage_filled": 0,
+    "coverage_requested": 0,
+    "decisions_today": 0,
+    "escalated": 0,
+    "needs_manager": 0,
+    "open_coverage": 0
+   },
+   "coverage": [],
+   "feed": [],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 3,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 2,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "callin.1": {
+   "_caption": "Mai leaves. Two off-shift colleagues are asked, best fit first.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:04",
+     "local_full": "Fri 25 Sep, 14:04",
+     "utc": "2026-09-25T18:04:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:05",
+     "local_full": "Fri 25 Sep, 14:05",
+     "utc": "2026-09-25T18:05:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 2,
+    "coverage_filled": 0,
+    "coverage_requested": 1,
+    "decisions_today": 4,
+    "escalated": 0,
+    "needs_manager": 0,
+    "open_coverage": 1
+   },
+   "coverage": [
+    {
+     "created_at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "expires_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "filled_by": null,
+     "id": 3,
+     "offers": [
+      {
+       "employee_id": 5,
+       "employee_name": "Luis Ferrer",
+       "id": 3,
+       "rank": 1,
+       "responded_at": null,
+       "score": 37.5,
+       "status": "sent"
+      },
+      {
+       "employee_id": 6,
+       "employee_name": "Sam Whitlock",
+       "id": 4,
+       "rank": 2,
+       "responded_at": null,
+       "score": 25.0,
+       "status": "sent"
+      }
+     ],
+     "order_code": "1043",
+     "status": "open",
+     "task_id": 1,
+     "task_title": "Pack order 1043",
+     "vacating": "Mai Tran",
+     "wave": 1
+    }
+   ],
+   "feed": [
+    {
+     "action": "leave_pending_coverage",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 4,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave for Mai Tran is pending cover for 1 task(s)",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 3,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "task",
+     "summary": "Reassigned 'Restock the cold line' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 2,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 2,
+     "subject_type": "task",
+     "summary": "Reassigned 'Prep order 1051' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "coverage_requested",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 8,
+     "id": 1,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Dev Osei",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Priya Raman",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "already on work of equal or higher priority (task 4)",
+       "rule": "no_conflicting_work"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "48.3h of a 48h weekly limit",
+       "rule": "within_weekly_hours"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Asked 2 colleague(s) to cover 'Pack order 1043' for order 1043",
+     "trigger": "leave_request"
+    }
+   ],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 4.1,
+     "hours_week": 4.1,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 2,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 2,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "callin.1.luis-accept": {
+   "_caption": "Luis takes it.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:06",
+     "local_full": "Fri 25 Sep, 14:06",
+     "utc": "2026-09-25T18:06:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:07",
+     "local_full": "Fri 25 Sep, 14:07",
+     "utc": "2026-09-25T18:07:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Luis Ferrer",
+     "assignee_id": 5,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 2,
+    "coverage_filled": 1,
+    "coverage_requested": 1,
+    "decisions_today": 6,
+    "escalated": 0,
+    "needs_manager": 0,
+    "open_coverage": 0
+   },
+   "coverage": [],
+   "feed": [
+    {
+     "action": "leave_approved",
+     "actor": "system",
+     "at": {
+      "local": "14:07",
+      "local_full": "Fri 25 Sep, 14:07",
+      "utc": "2026-09-25T18:07:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 6,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave approved for Mai Tran: cover secured for every impacted task",
+     "trigger": "coverage_reply"
+    },
+    {
+     "action": "coverage_filled",
+     "actor": "system",
+     "at": {
+      "local": "14:07",
+      "local_full": "Fri 25 Sep, 14:07",
+      "utc": "2026-09-25T18:07:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 5,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Luis Ferrer accepted cover for 'Pack order 1043'",
+     "trigger": "coverage_reply"
+    },
+    {
+     "action": "leave_pending_coverage",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 4,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave for Mai Tran is pending cover for 1 task(s)",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 3,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "task",
+     "summary": "Reassigned 'Restock the cold line' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 2,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 2,
+     "subject_type": "task",
+     "summary": "Reassigned 'Prep order 1051' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "coverage_requested",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 8,
+     "id": 1,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Dev Osei",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Priya Raman",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "already on work of equal or higher priority (task 4)",
+       "rule": "no_conflicting_work"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "48.3h of a 48h weekly limit",
+       "rule": "within_weekly_hours"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Asked 2 colleague(s) to cover 'Pack order 1043' for order 1043",
+     "trigger": "leave_request"
+    }
+   ],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 1,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 4.1,
+     "hours_week": 4.1,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 2,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 2,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "callin.1.luis-decline": {
+   "_caption": "Luis cannot.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:06",
+     "local_full": "Fri 25 Sep, 14:06",
+     "utc": "2026-09-25T18:06:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:07",
+     "local_full": "Fri 25 Sep, 14:07",
+     "utc": "2026-09-25T18:07:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 2,
+    "coverage_filled": 0,
+    "coverage_requested": 1,
+    "decisions_today": 4,
+    "escalated": 0,
+    "needs_manager": 0,
+    "open_coverage": 1
+   },
+   "coverage": [
+    {
+     "created_at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "expires_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "filled_by": null,
+     "id": 3,
+     "offers": [
+      {
+       "employee_id": 5,
+       "employee_name": "Luis Ferrer",
+       "id": 3,
+       "rank": 1,
+       "responded_at": {
+        "local": "14:07",
+        "local_full": "Fri 25 Sep, 14:07",
+        "utc": "2026-09-25T18:07:00Z"
+       },
+       "score": 37.5,
+       "status": "declined"
+      },
+      {
+       "employee_id": 6,
+       "employee_name": "Sam Whitlock",
+       "id": 4,
+       "rank": 2,
+       "responded_at": null,
+       "score": 25.0,
+       "status": "sent"
+      }
+     ],
+     "order_code": "1043",
+     "status": "open",
+     "task_id": 1,
+     "task_title": "Pack order 1043",
+     "vacating": "Mai Tran",
+     "wave": 1
+    }
+   ],
+   "feed": [
+    {
+     "action": "leave_pending_coverage",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 4,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave for Mai Tran is pending cover for 1 task(s)",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 3,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "task",
+     "summary": "Reassigned 'Restock the cold line' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 2,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 2,
+     "subject_type": "task",
+     "summary": "Reassigned 'Prep order 1051' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "coverage_requested",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 8,
+     "id": 1,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Dev Osei",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Priya Raman",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "already on work of equal or higher priority (task 4)",
+       "rule": "no_conflicting_work"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "48.3h of a 48h weekly limit",
+       "rule": "within_weekly_hours"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Asked 2 colleague(s) to cover 'Pack order 1043' for order 1043",
+     "trigger": "leave_request"
+    }
+   ],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 4.1,
+     "hours_week": 4.1,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 2,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 2,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "callin.1.luis-decline.sam-accept": {
+   "_caption": "Sam takes it.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:08",
+     "local_full": "Fri 25 Sep, 14:08",
+     "utc": "2026-09-25T18:08:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:09",
+     "local_full": "Fri 25 Sep, 14:09",
+     "utc": "2026-09-25T18:09:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Sam Whitlock",
+     "assignee_id": 6,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 2,
+    "coverage_filled": 1,
+    "coverage_requested": 1,
+    "decisions_today": 6,
+    "escalated": 0,
+    "needs_manager": 0,
+    "open_coverage": 0
+   },
+   "coverage": [],
+   "feed": [
+    {
+     "action": "leave_approved",
+     "actor": "system",
+     "at": {
+      "local": "14:09",
+      "local_full": "Fri 25 Sep, 14:09",
+      "utc": "2026-09-25T18:09:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 6,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave approved for Mai Tran: cover secured for every impacted task",
+     "trigger": "coverage_reply"
+    },
+    {
+     "action": "coverage_filled",
+     "actor": "system",
+     "at": {
+      "local": "14:09",
+      "local_full": "Fri 25 Sep, 14:09",
+      "utc": "2026-09-25T18:09:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 5,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Sam Whitlock accepted cover for 'Pack order 1043'",
+     "trigger": "coverage_reply"
+    },
+    {
+     "action": "leave_pending_coverage",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 4,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave for Mai Tran is pending cover for 1 task(s)",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 3,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "task",
+     "summary": "Reassigned 'Restock the cold line' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 2,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 2,
+     "subject_type": "task",
+     "summary": "Reassigned 'Prep order 1051' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "coverage_requested",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 8,
+     "id": 1,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Dev Osei",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Priya Raman",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "already on work of equal or higher priority (task 4)",
+       "rule": "no_conflicting_work"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "48.3h of a 48h weekly limit",
+       "rule": "within_weekly_hours"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Asked 2 colleague(s) to cover 'Pack order 1043' for order 1043",
+     "trigger": "leave_request"
+    }
+   ],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 4.2,
+     "hours_week": 4.2,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 2,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 3,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "callin.1.luis-decline.sam-decline": {
+   "_caption": "Sam cannot.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:08",
+     "local_full": "Fri 25 Sep, 14:08",
+     "utc": "2026-09-25T18:08:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:09",
+     "local_full": "Fri 25 Sep, 14:09",
+     "utc": "2026-09-25T18:09:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 2,
+    "coverage_filled": 0,
+    "coverage_requested": 1,
+    "decisions_today": 5,
+    "escalated": 1,
+    "needs_manager": 1,
+    "open_coverage": 0
+   },
+   "coverage": [
+    {
+     "created_at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "expires_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "filled_by": null,
+     "id": 3,
+     "offers": [
+      {
+       "employee_id": 5,
+       "employee_name": "Luis Ferrer",
+       "id": 3,
+       "rank": 1,
+       "responded_at": {
+        "local": "14:07",
+        "local_full": "Fri 25 Sep, 14:07",
+        "utc": "2026-09-25T18:07:00Z"
+       },
+       "score": 37.5,
+       "status": "declined"
+      },
+      {
+       "employee_id": 6,
+       "employee_name": "Sam Whitlock",
+       "id": 4,
+       "rank": 2,
+       "responded_at": {
+        "local": "14:09",
+        "local_full": "Fri 25 Sep, 14:09",
+        "utc": "2026-09-25T18:09:00Z"
+       },
+       "score": 25.0,
+       "status": "declined"
+      }
+     ],
+     "order_code": "1043",
+     "status": "escalated",
+     "task_id": 1,
+     "task_title": "Pack order 1043",
+     "vacating": "Mai Tran",
+     "wave": 1
+    }
+   ],
+   "feed": [
+    {
+     "action": "escalated",
+     "actor": "system",
+     "at": {
+      "local": "14:09",
+      "local_full": "Fri 25 Sep, 14:09",
+      "utc": "2026-09-25T18:09:00Z"
+     },
+     "blockers": [
+      "3 x not trained for it",
+      "1 x busy with equal or higher priority work",
+      "1 x would exceed the weekly hours limit"
+     ],
+     "chosen": null,
+     "considered": 0,
+     "id": 5,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Still no cover for 'Pack order 1043' (order 1043) - everyone asked has declined and nobody else is eligible",
+     "trigger": "coverage_reply"
+    },
+    {
+     "action": "leave_pending_coverage",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 4,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave for Mai Tran is pending cover for 1 task(s)",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 3,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "task",
+     "summary": "Reassigned 'Restock the cold line' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 2,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 2,
+     "subject_type": "task",
+     "summary": "Reassigned 'Prep order 1051' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "coverage_requested",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 8,
+     "id": 1,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Dev Osei",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Priya Raman",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "already on work of equal or higher priority (task 4)",
+       "rule": "no_conflicting_work"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "48.3h of a 48h weekly limit",
+       "rule": "within_weekly_hours"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Asked 2 colleague(s) to cover 'Pack order 1043' for order 1043",
+     "trigger": "leave_request"
+    }
+   ],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 4.2,
+     "hours_week": 4.2,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 2,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 2,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "callin.1.sam-accept": {
+   "_caption": "Sam takes it.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:06",
+     "local_full": "Fri 25 Sep, 14:06",
+     "utc": "2026-09-25T18:06:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:07",
+     "local_full": "Fri 25 Sep, 14:07",
+     "utc": "2026-09-25T18:07:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Sam Whitlock",
+     "assignee_id": 6,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 2,
+    "coverage_filled": 1,
+    "coverage_requested": 1,
+    "decisions_today": 6,
+    "escalated": 0,
+    "needs_manager": 0,
+    "open_coverage": 0
+   },
+   "coverage": [],
+   "feed": [
+    {
+     "action": "leave_approved",
+     "actor": "system",
+     "at": {
+      "local": "14:07",
+      "local_full": "Fri 25 Sep, 14:07",
+      "utc": "2026-09-25T18:07:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 6,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave approved for Mai Tran: cover secured for every impacted task",
+     "trigger": "coverage_reply"
+    },
+    {
+     "action": "coverage_filled",
+     "actor": "system",
+     "at": {
+      "local": "14:07",
+      "local_full": "Fri 25 Sep, 14:07",
+      "utc": "2026-09-25T18:07:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 5,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Sam Whitlock accepted cover for 'Pack order 1043'",
+     "trigger": "coverage_reply"
+    },
+    {
+     "action": "leave_pending_coverage",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 4,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave for Mai Tran is pending cover for 1 task(s)",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 3,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "task",
+     "summary": "Reassigned 'Restock the cold line' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 2,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 2,
+     "subject_type": "task",
+     "summary": "Reassigned 'Prep order 1051' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "coverage_requested",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 8,
+     "id": 1,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Dev Osei",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Priya Raman",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "already on work of equal or higher priority (task 4)",
+       "rule": "no_conflicting_work"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "48.3h of a 48h weekly limit",
+       "rule": "within_weekly_hours"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Asked 2 colleague(s) to cover 'Pack order 1043' for order 1043",
+     "trigger": "leave_request"
+    }
+   ],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 4.1,
+     "hours_week": 4.1,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 2,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 3,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "callin.1.sam-decline": {
+   "_caption": "Sam cannot.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:06",
+     "local_full": "Fri 25 Sep, 14:06",
+     "utc": "2026-09-25T18:06:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:07",
+     "local_full": "Fri 25 Sep, 14:07",
+     "utc": "2026-09-25T18:07:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 2,
+    "coverage_filled": 0,
+    "coverage_requested": 1,
+    "decisions_today": 4,
+    "escalated": 0,
+    "needs_manager": 0,
+    "open_coverage": 1
+   },
+   "coverage": [
+    {
+     "created_at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "expires_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "filled_by": null,
+     "id": 3,
+     "offers": [
+      {
+       "employee_id": 5,
+       "employee_name": "Luis Ferrer",
+       "id": 3,
+       "rank": 1,
+       "responded_at": null,
+       "score": 37.5,
+       "status": "sent"
+      },
+      {
+       "employee_id": 6,
+       "employee_name": "Sam Whitlock",
+       "id": 4,
+       "rank": 2,
+       "responded_at": {
+        "local": "14:07",
+        "local_full": "Fri 25 Sep, 14:07",
+        "utc": "2026-09-25T18:07:00Z"
+       },
+       "score": 25.0,
+       "status": "declined"
+      }
+     ],
+     "order_code": "1043",
+     "status": "open",
+     "task_id": 1,
+     "task_title": "Pack order 1043",
+     "vacating": "Mai Tran",
+     "wave": 1
+    }
+   ],
+   "feed": [
+    {
+     "action": "leave_pending_coverage",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 4,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave for Mai Tran is pending cover for 1 task(s)",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 3,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "task",
+     "summary": "Reassigned 'Restock the cold line' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 2,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 2,
+     "subject_type": "task",
+     "summary": "Reassigned 'Prep order 1051' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "coverage_requested",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 8,
+     "id": 1,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Dev Osei",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Priya Raman",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "already on work of equal or higher priority (task 4)",
+       "rule": "no_conflicting_work"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "48.3h of a 48h weekly limit",
+       "rule": "within_weekly_hours"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Asked 2 colleague(s) to cover 'Pack order 1043' for order 1043",
+     "trigger": "leave_request"
+    }
+   ],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 4.1,
+     "hours_week": 4.1,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 2,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 2,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "callin.1.sam-decline.luis-accept": {
+   "_caption": "Luis takes it.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:08",
+     "local_full": "Fri 25 Sep, 14:08",
+     "utc": "2026-09-25T18:08:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:09",
+     "local_full": "Fri 25 Sep, 14:09",
+     "utc": "2026-09-25T18:09:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Luis Ferrer",
+     "assignee_id": 5,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 2,
+    "coverage_filled": 1,
+    "coverage_requested": 1,
+    "decisions_today": 6,
+    "escalated": 0,
+    "needs_manager": 0,
+    "open_coverage": 0
+   },
+   "coverage": [],
+   "feed": [
+    {
+     "action": "leave_approved",
+     "actor": "system",
+     "at": {
+      "local": "14:09",
+      "local_full": "Fri 25 Sep, 14:09",
+      "utc": "2026-09-25T18:09:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 6,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave approved for Mai Tran: cover secured for every impacted task",
+     "trigger": "coverage_reply"
+    },
+    {
+     "action": "coverage_filled",
+     "actor": "system",
+     "at": {
+      "local": "14:09",
+      "local_full": "Fri 25 Sep, 14:09",
+      "utc": "2026-09-25T18:09:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 5,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Luis Ferrer accepted cover for 'Pack order 1043'",
+     "trigger": "coverage_reply"
+    },
+    {
+     "action": "leave_pending_coverage",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 4,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave for Mai Tran is pending cover for 1 task(s)",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 3,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "task",
+     "summary": "Reassigned 'Restock the cold line' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 2,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 2,
+     "subject_type": "task",
+     "summary": "Reassigned 'Prep order 1051' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "coverage_requested",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 8,
+     "id": 1,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Dev Osei",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Priya Raman",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "already on work of equal or higher priority (task 4)",
+       "rule": "no_conflicting_work"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "48.3h of a 48h weekly limit",
+       "rule": "within_weekly_hours"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Asked 2 colleague(s) to cover 'Pack order 1043' for order 1043",
+     "trigger": "leave_request"
+    }
+   ],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 1,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 4.2,
+     "hours_week": 4.2,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 2,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 2,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "callin.1.sam-decline.luis-decline": {
+   "_caption": "Luis cannot.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:08",
+     "local_full": "Fri 25 Sep, 14:08",
+     "utc": "2026-09-25T18:08:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:09",
+     "local_full": "Fri 25 Sep, 14:09",
+     "utc": "2026-09-25T18:09:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 2,
+    "coverage_filled": 0,
+    "coverage_requested": 1,
+    "decisions_today": 5,
+    "escalated": 1,
+    "needs_manager": 1,
+    "open_coverage": 0
+   },
+   "coverage": [
+    {
+     "created_at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "expires_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "filled_by": null,
+     "id": 3,
+     "offers": [
+      {
+       "employee_id": 5,
+       "employee_name": "Luis Ferrer",
+       "id": 3,
+       "rank": 1,
+       "responded_at": {
+        "local": "14:09",
+        "local_full": "Fri 25 Sep, 14:09",
+        "utc": "2026-09-25T18:09:00Z"
+       },
+       "score": 37.5,
+       "status": "declined"
+      },
+      {
+       "employee_id": 6,
+       "employee_name": "Sam Whitlock",
+       "id": 4,
+       "rank": 2,
+       "responded_at": {
+        "local": "14:07",
+        "local_full": "Fri 25 Sep, 14:07",
+        "utc": "2026-09-25T18:07:00Z"
+       },
+       "score": 25.0,
+       "status": "declined"
+      }
+     ],
+     "order_code": "1043",
+     "status": "escalated",
+     "task_id": 1,
+     "task_title": "Pack order 1043",
+     "vacating": "Mai Tran",
+     "wave": 1
+    }
+   ],
+   "feed": [
+    {
+     "action": "escalated",
+     "actor": "system",
+     "at": {
+      "local": "14:09",
+      "local_full": "Fri 25 Sep, 14:09",
+      "utc": "2026-09-25T18:09:00Z"
+     },
+     "blockers": [
+      "3 x not trained for it",
+      "1 x busy with equal or higher priority work",
+      "1 x would exceed the weekly hours limit"
+     ],
+     "chosen": null,
+     "considered": 0,
+     "id": 5,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Still no cover for 'Pack order 1043' (order 1043) - everyone asked has declined and nobody else is eligible",
+     "trigger": "coverage_reply"
+    },
+    {
+     "action": "leave_pending_coverage",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 4,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave for Mai Tran is pending cover for 1 task(s)",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 3,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "task",
+     "summary": "Reassigned 'Restock the cold line' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 2,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 2,
+     "subject_type": "task",
+     "summary": "Reassigned 'Prep order 1051' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "coverage_requested",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 8,
+     "id": 1,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Dev Osei",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Priya Raman",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "already on work of equal or higher priority (task 4)",
+       "rule": "no_conflicting_work"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "48.3h of a 48h weekly limit",
+       "rule": "within_weekly_hours"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Asked 2 colleague(s) to cover 'Pack order 1043' for order 1043",
+     "trigger": "leave_request"
+    }
+   ],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 4.2,
+     "hours_week": 4.2,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 2,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 2,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "onshift.0": {
+   "_caption": "The kitchen at work. Mai is packing order 1043.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:04",
+     "local_full": "Fri 25 Sep, 14:04",
+     "utc": "2026-09-25T18:04:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:05",
+     "local_full": "Fri 25 Sep, 14:05",
+     "utc": "2026-09-25T18:05:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 0,
+    "coverage_filled": 0,
+    "coverage_requested": 0,
+    "decisions_today": 0,
+    "escalated": 0,
+    "needs_manager": 0,
+    "open_coverage": 0
+   },
+   "coverage": [],
+   "feed": [],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      },
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 3,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 2,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "onshift.1": {
+   "_caption": "Mai leaves. Dev is on shift and qualified, so the job just moves.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "14:04",
+     "local_full": "Fri 25 Sep, 14:04",
+     "utc": "2026-09-25T18:04:56Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:05",
+     "local_full": "Fri 25 Sep, 14:05",
+     "utc": "2026-09-25T18:05:00Z"
+    },
+    "seconds_since_sweep": 4,
+    "status": "active",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Dev Osei",
+     "assignee_id": 2,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 3,
+    "coverage_filled": 0,
+    "coverage_requested": 0,
+    "decisions_today": 4,
+    "escalated": 0,
+    "needs_manager": 0,
+    "open_coverage": 0
+   },
+   "coverage": [],
+   "feed": [
+    {
+     "action": "leave_approved",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 4,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave approved for Mai Tran: 3 impacted task(s) all covered",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 3,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "task",
+     "summary": "Reassigned 'Restock the cold line' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 2,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 2,
+     "subject_type": "task",
+     "summary": "Reassigned 'Prep order 1051' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Dev Osei",
+     "considered": 8,
+     "id": 1,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Priya Raman",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "already on work of equal or higher priority (task 4)",
+       "rule": "no_conflicting_work"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "48.3h of a 48h weekly limit",
+       "rule": "within_weekly_hours"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "task",
+     "summary": "Reassigned 'Pack order 1043' from Mai Tran to Dev Osei",
+     "trigger": "leave_request"
+    }
+   ],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      },
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 4.1,
+     "hours_week": 4.1,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 2,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 2,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  },
+  "stalled": {
+   "_caption": "What it looks like when the scheduler dies: the page says so.",
+   "agent": {
+    "auto_coverage_requests": true,
+    "auto_reassign": true,
+    "business_tz": "America/New_York",
+    "dry_run": true,
+    "last_sweep": {
+     "local": "13:59",
+     "local_full": "Fri 25 Sep, 13:59",
+     "utc": "2026-09-25T17:59:00Z"
+    },
+    "limits": {
+     "daily_hours": 10.0,
+     "min_rest_hours": 11.0,
+     "weekly_hours": 48.0
+    },
+    "messaging": "Dry run",
+    "now": {
+     "local": "14:05",
+     "local_full": "Fri 25 Sep, 14:05",
+     "utc": "2026-09-25T18:05:00Z"
+    },
+    "seconds_since_sweep": 360,
+    "status": "stalled",
+    "sweep_interval_seconds": 60
+   },
+   "board": [
+    {
+     "assignee": "Nia Boateng",
+     "assignee_id": 4,
+     "deadline": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "15:00",
+      "local_full": "Fri 25 Sep, 15:00",
+      "utc": "2026-09-25T19:00:00Z"
+     },
+     "id": 4,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "critical",
+     "starts_at": {
+      "local": "14:00",
+      "local_full": "Fri 25 Sep, 14:00",
+      "utc": "2026-09-25T18:00:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Run the expo pass"
+    },
+    {
+     "assignee": "Mai Tran",
+     "assignee_id": 1,
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "14:45",
+      "local_full": "Fri 25 Sep, 14:45",
+      "utc": "2026-09-25T18:45:00Z"
+     },
+     "id": 1,
+     "order_code": "1043",
+     "pickup_at": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "priority": "high",
+     "starts_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "station": "Pass",
+     "status": "pending",
+     "title": "Pack order 1043"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "driver": "QuickDrop",
+     "due_at": {
+      "local": "16:00",
+      "local_full": "Fri 25 Sep, 16:00",
+      "utc": "2026-09-25T20:00:00Z"
+     },
+     "id": 2,
+     "order_code": "1051",
+     "pickup_at": {
+      "local": "16:20",
+      "local_full": "Fri 25 Sep, 16:20",
+      "utc": "2026-09-25T20:20:00Z"
+     },
+     "priority": "routine",
+     "starts_at": {
+      "local": "15:30",
+      "local_full": "Fri 25 Sep, 15:30",
+      "utc": "2026-09-25T19:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Prep order 1051"
+    },
+    {
+     "assignee": "Priya Raman",
+     "assignee_id": 3,
+     "deadline": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "driver": null,
+     "due_at": {
+      "local": "17:00",
+      "local_full": "Fri 25 Sep, 17:00",
+      "utc": "2026-09-25T21:00:00Z"
+     },
+     "id": 3,
+     "order_code": null,
+     "pickup_at": null,
+     "priority": "routine",
+     "starts_at": {
+      "local": "16:30",
+      "local_full": "Fri 25 Sep, 16:30",
+      "utc": "2026-09-25T20:30:00Z"
+     },
+     "station": "Cold line",
+     "status": "pending",
+     "title": "Restock the cold line"
+    }
+   ],
+   "counters": {
+    "auto_reassigned": 2,
+    "coverage_filled": 0,
+    "coverage_requested": 1,
+    "decisions_today": 4,
+    "escalated": 0,
+    "needs_manager": 0,
+    "open_coverage": 1
+   },
+   "coverage": [
+    {
+     "created_at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "deadline": {
+      "local": "14:50",
+      "local_full": "Fri 25 Sep, 14:50",
+      "utc": "2026-09-25T18:50:00Z"
+     },
+     "expires_at": {
+      "local": "14:15",
+      "local_full": "Fri 25 Sep, 14:15",
+      "utc": "2026-09-25T18:15:00Z"
+     },
+     "filled_by": null,
+     "id": 3,
+     "offers": [
+      {
+       "employee_id": 5,
+       "employee_name": "Luis Ferrer",
+       "id": 3,
+       "rank": 1,
+       "responded_at": null,
+       "score": 37.5,
+       "status": "sent"
+      },
+      {
+       "employee_id": 6,
+       "employee_name": "Sam Whitlock",
+       "id": 4,
+       "rank": 2,
+       "responded_at": null,
+       "score": 25.0,
+       "status": "sent"
+      }
+     ],
+     "order_code": "1043",
+     "status": "open",
+     "task_id": 1,
+     "task_title": "Pack order 1043",
+     "vacating": "Mai Tran",
+     "wave": 1
+    }
+   ],
+   "feed": [
+    {
+     "action": "leave_pending_coverage",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 0,
+     "id": 4,
+     "rejected": [],
+     "reverted_by_id": null,
+     "subject_id": 1,
+     "subject_type": "leave_request",
+     "summary": "Leave for Mai Tran is pending cover for 1 task(s)",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 3,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "task",
+     "summary": "Reassigned 'Restock the cold line' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "auto_reassigned",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": "Priya Raman",
+     "considered": 8,
+     "id": 2,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Sam Whitlock",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in prep",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 2,
+     "subject_type": "task",
+     "summary": "Reassigned 'Prep order 1051' from Mai Tran to Priya Raman",
+     "trigger": "leave_request"
+    },
+    {
+     "action": "coverage_requested",
+     "actor": "system",
+     "at": {
+      "local": "14:05",
+      "local_full": "Fri 25 Sep, 14:05",
+      "utc": "2026-09-25T18:05:00Z"
+     },
+     "blockers": [],
+     "chosen": null,
+     "considered": 8,
+     "id": 1,
+     "rejected": [
+      {
+       "name": "Mai Tran",
+       "reason": "this is the employee going on leave",
+       "rule": "not_the_person_leaving"
+      },
+      {
+       "name": "Dev Osei",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Priya Raman",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      },
+      {
+       "name": "Nia Boateng",
+       "reason": "already on work of equal or higher priority (task 4)",
+       "rule": "no_conflicting_work"
+      },
+      {
+       "name": "Tomas Iglesias",
+       "reason": "48.3h of a 48h weekly limit",
+       "rule": "within_weekly_hours"
+      },
+      {
+       "name": "Robin Diaz",
+       "reason": "not trained in pack",
+       "rule": "has_required_skill"
+      }
+     ],
+     "reverted_by_id": null,
+     "subject_id": 3,
+     "subject_type": "coverage_request",
+     "summary": "Asked 2 colleague(s) to cover 'Pack order 1043' for order 1043",
+     "trigger": "leave_request"
+    }
+   ],
+   "staff": [
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 2,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Dev Osei",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 5,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Luis Ferrer",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 2
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 4.1,
+     "hours_week": 4.1,
+     "id": 1,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Mai Tran",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 4
+      },
+      {
+       "code": "pack",
+       "level": 4
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 4,
+     "is_manager": false,
+     "live_tasks": 1,
+     "name": "Nia Boateng",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 4
+      },
+      {
+       "code": "expo",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 8.0,
+     "hours_week": 8.0,
+     "id": 3,
+     "is_manager": false,
+     "live_tasks": 2,
+     "name": "Priya Raman",
+     "on_leave": false,
+     "on_shift": true,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "prep",
+       "level": 5
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 8,
+     "is_manager": true,
+     "live_tasks": 0,
+     "name": "Robin Diaz",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "manager",
+     "skills": []
+    },
+    {
+     "asks_today": 1,
+     "hours_today": 0.0,
+     "hours_week": 0.0,
+     "id": 6,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Sam Whitlock",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 2,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    },
+    {
+     "asks_today": 0,
+     "hours_today": 0.0,
+     "hours_week": 48.0,
+     "id": 7,
+     "is_manager": false,
+     "live_tasks": 0,
+     "name": "Tomas Iglesias",
+     "on_leave": false,
+     "on_shift": false,
+     "recent_covers": 0,
+     "role": "staff",
+     "skills": [
+      {
+       "code": "pack",
+       "level": 3
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "leave": {
+  "callin.0": "callin.1",
+  "onshift.0": "onshift.1"
+ },
+ "leave_actions": {
+  "callin.0": [
+   "coverage_requested",
+   "auto_reassigned",
+   "auto_reassigned"
+  ],
+  "onshift.0": [
+   "auto_reassigned",
+   "auto_reassigned",
+   "auto_reassigned"
+  ]
+ },
+ "recorded_at": "2026-09-25T18:05:00Z",
+ "replies": {
+  "callin.1": {
+   "accept:5": {
+    "message": "Thanks - you're covering Pack order 1043.",
+    "next": "callin.1.luis-accept"
+   },
+   "accept:6": {
+    "message": "Thanks - you're covering Pack order 1043.",
+    "next": "callin.1.sam-accept"
+   },
+   "decline:5": {
+    "message": "No problem - noted, we'll ask someone else.",
+    "next": "callin.1.luis-decline"
+   },
+   "decline:6": {
+    "message": "No problem - noted, we'll ask someone else.",
+    "next": "callin.1.sam-decline"
+   }
+  },
+  "callin.1.luis-decline": {
+   "accept:6": {
+    "message": "Thanks - you're covering Pack order 1043.",
+    "next": "callin.1.luis-decline.sam-accept"
+   },
+   "decline:6": {
+    "message": "No problem - noted, we'll ask someone else.",
+    "next": "callin.1.luis-decline.sam-decline"
+   }
+  },
+  "callin.1.sam-decline": {
+   "accept:5": {
+    "message": "Thanks - you're covering Pack order 1043.",
+    "next": "callin.1.sam-decline.luis-accept"
+   },
+   "decline:5": {
+    "message": "No problem - noted, we'll ask someone else.",
+    "next": "callin.1.sam-decline.luis-decline"
+   }
+  }
+ },
+ "stalled": "stalled",
+ "start": {
+  "call_in": "callin.0",
+  "on_shift": "onshift.0"
+ }
+}
