@@ -66,6 +66,7 @@ class Recorder:
     notifier: ConsoleNotifier
     world: World
     frames: dict[str, Any]
+    me_frames: dict[str, Any] = field(default_factory=dict)
     last_message: str = ""
     leave_actions: list[str] = field(default_factory=list)
 
@@ -78,11 +79,24 @@ class Recorder:
         payload = self.client.get("/api/dashboard").json()
         payload["_caption"] = caption
         self.frames[key] = payload
+        # The same moment from each person's own side. Recording all of them
+        # costs a few hundred kilobytes and means the walkthrough can switch
+        # roles without a gap -- including the empty views, which are their own
+        # kind of answer: Tomas was never asked, and his page shows it.
+        self.me_frames[key] = {
+            str(employee.id): self.client.get(f"/api/me/{employee.id}").json()
+            for employee in self.world.employees.values()
+        }
         print(f"  {key:<18} {caption}")
         return payload
 
 
-def _build(variant: str, anchor: datetime, frames: dict[str, Any]) -> Recorder:
+def _build(
+    variant: str,
+    anchor: datetime,
+    frames: dict[str, Any],
+    me_frames: dict[str, Any] | None = None,
+) -> Recorder:
     settings = Settings(
         database_url="sqlite://",
         business_tz="America/New_York",
@@ -116,6 +130,7 @@ def _build(variant: str, anchor: datetime, frames: dict[str, Any]) -> Recorder:
         notifier=notifier,
         world=world,
         frames=frames,
+        me_frames=me_frames if me_frames is not None else {},
     )
 
 
@@ -181,6 +196,7 @@ def _pending(rec: Recorder, request_id: int) -> list[tuple[str, int]]:
 def _walk_call_in(
     anchor: datetime,
     frames: dict[str, Any],
+    me_frames: dict[str, Any],
     replies: dict[str, Any],
     leave_actions: dict[str, list[str]],
 ) -> str:
@@ -192,7 +208,7 @@ def _walk_call_in(
     """
 
     def build(path: list[tuple[str, bool]]) -> tuple[Recorder, int]:
-        rec = _build("call_in", anchor, frames)
+        rec = _build("call_in", anchor, frames, me_frames)
         rec.beat()
         _file_leave(rec)
         request = _open_request(rec)
@@ -240,12 +256,13 @@ def capture(anchor: datetime | None = None) -> dict[str, Any]:
     """Run every branch worth showing and keep the dashboard's view of each."""
     anchor = anchor or SIM_NOW
     frames: dict[str, Any] = {}
+    me_frames: dict[str, Any] = {}
     replies: dict[str, Any] = {}
     leave_actions: dict[str, list[str]] = {}
 
     # --- someone on shift can take it -------------------------------------
     print("on_shift:")
-    rec = _build("on_shift", anchor, frames)
+    rec = _build("on_shift", anchor, frames, me_frames)
     rec.beat()
     rec.snap("onshift.0", "The kitchen at work. Mai is packing order 1043.")
     _file_leave(rec)
@@ -256,23 +273,28 @@ def capture(anchor: datetime | None = None) -> dict[str, Any]:
 
     # --- nobody on shift, so the agent rings round -------------------------
     print("call_in:")
-    rec = _build("call_in", anchor, frames)
+    rec = _build("call_in", anchor, frames, me_frames)
     rec.beat()
     rec.snap("callin.0", "Same kitchen, but nobody on shift is signed off on packing.")
     rec.session.close()
-    _walk_call_in(anchor, frames, replies, leave_actions)
+    _walk_call_in(anchor, frames, me_frames, replies, leave_actions)
 
     # --- the agent itself has stopped --------------------------------------
     print("stalled:")
-    rec = _build("call_in", anchor, frames)
+    rec = _build("call_in", anchor, frames, me_frames)
     _file_leave(rec)
     rec.beat(age_seconds=int(STALLED_AFTER.total_seconds()))
     rec.snap("stalled", "What it looks like when the scheduler dies: the page says so.")
-    rec.session.close()
 
+    roster = rec.client.get("/api/me/switchable").json()
     return {
         "recorded_at": anchor.isoformat() + "Z",
         "business_tz": "America/New_York",
+        "roster": roster,
+        # The walkthrough follows one person's leave; the employee page needs
+        # to know whose, so it can offer the form to them and nobody else.
+        "leave_employee_id": rec.world.employee_id("mai"),
+        "me_frames": me_frames,
         "start": {"on_shift": "onshift.0", "call_in": "callin.0"},
         "leave": {"onshift.0": "onshift.1", "callin.0": "callin.1"},
         "replies": replies,

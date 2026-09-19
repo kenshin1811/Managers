@@ -71,6 +71,36 @@
     agent.now = stampAt(now);
   }
 
+  /** One person's own view of the current moment. */
+  function meFrame(employeeId) {
+    const perFrame = data.me_frames[current] || {};
+    const raw = perFrame[String(employeeId)];
+    if (!raw) throw new Error("That person was not recorded at this step.");
+    const payload = rebase(JSON.parse(JSON.stringify(raw)));
+    advanceHeartbeat(payload.agent);
+    // Clocking in and out was never recorded, and only one person's leave was,
+    // so the page shows those read-only rather than offering a dead button.
+    payload.can = {
+      switch_people: true,
+      clock: false,
+      request_leave:
+        String(employeeId) === String(data.leave_employee_id) && Boolean(data.leave[current]),
+    };
+    return payload;
+  }
+
+  /** Whoever this step is actually about, for the role switch to land on. */
+  function principal() {
+    const perFrame = data.me_frames[current] || {};
+    const waiting = Object.entries(perFrame).find(([, view]) =>
+      view.cover_requests.some((r) => r.my_status === "sent")
+    );
+    if (waiting) return Number(waiting[0]);
+    const leaving = Object.entries(perFrame).find(([, view]) => view.leave.length);
+    if (leaving) return Number(leaving[0]);
+    return (data.roster[0] || {}).id;
+  }
+
   function frame(key) {
     const raw = data.frames[key];
     if (!raw) throw new Error("That step was not recorded.");
@@ -89,6 +119,11 @@
   window.__REPLAY__ = {
     get caption() {
       return (data.frames[current] || {})._caption || "";
+    },
+
+    /** Whoever this step is about, so the role switch lands somewhere useful. */
+    get principal() {
+      return principal();
     },
 
     /* Showing a dead agent is the one state nobody can wait around for, and
@@ -110,6 +145,25 @@
       const body = options.body ? JSON.parse(options.body) : {};
 
       if (path === "/api/dashboard") return frame(current);
+
+      if (path === "/api/me/switchable") return data.roster;
+
+      const mine = /^\/api\/me\/(\d+)/.exec(path);
+      if (mine) return meFrame(mine[1]);
+
+      if (path.startsWith("/api/me/whoami")) {
+        throw new Error("The walkthrough has no signed links -- pick a person instead.");
+      }
+
+      if (path === "/leave-requests") {
+        const next = data.leave[current];
+        if (!next || String(body.employee_id) !== String(data.leave_employee_id)) {
+          throw notRecorded();
+        }
+        const actions = data.leave_actions[current] || [];
+        current = next;
+        return { plan: { task_plans: actions.map((action) => ({ action })) } };
+      }
 
       if (path === "/api/demo/variants") {
         return {
@@ -156,6 +210,30 @@
       throw notRecorded();
     },
   };
+
+  const rolePicker = document.getElementById("role-picker");
+  if (rolePicker) {
+    rolePicker.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-role]");
+      if (!button) return;
+      const employee = button.dataset.role === "employee";
+      rolePicker.querySelectorAll("button").forEach((b) => {
+        b.classList.toggle("on", b === button);
+        b.setAttribute("aria-checked", String(b === button));
+      });
+      document.getElementById("view-manager").hidden = employee;
+      document.getElementById("view-employee").hidden = !employee;
+      window.scrollTo({ top: 0 });
+      // Land on whoever this step is about, rather than whichever name sorts
+      // first -- otherwise switching to the employee view at the moment a
+      // cover request goes out shows somebody with nothing to do.
+      if (employee && window.__employeeView) {
+        window.__employeeView.setPerson(window.__REPLAY__.principal);
+      } else if (window.__dashboardRefresh) {
+        window.__dashboardRefresh();
+      }
+    });
+  }
 
   const stalledButton = document.getElementById("btn-stalled");
   if (stalledButton) {
