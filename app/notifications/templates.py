@@ -18,7 +18,7 @@ from app.models.coverage import CoverageOffer, CoverageRequest
 from app.models.employee import Employee
 from app.models.task import Task
 from app.notifications.base import Message
-from app.tokens import make_token
+from app.tokens import make_identity_token, make_token
 
 
 def _local(moment: datetime | None, settings: Settings) -> str:
@@ -57,6 +57,14 @@ def coverage_links(offer: CoverageOffer, settings: Settings) -> tuple[str, str]:
         f"{base}/coverage/respond?token={accept}",
         f"{base}/coverage/respond?token={decline}",
     )
+
+
+def identity_link(employee: Employee, settings: Settings) -> str:
+    """A link that opens this person's own page and nobody else's."""
+    token = make_identity_token(
+        employee.id, settings.coverage_link_secret, settings.coverage_link_ttl_minutes
+    )
+    return f"{settings.public_base_url.rstrip('/')}/me?token={token}"
 
 
 def cover_request(
@@ -118,6 +126,15 @@ def cover_request(
                     "url": decline_url,
                     "action_id": f"coverage_decline_{offer.id}",
                     "value": str(offer.id),
+                },
+                # The two buttons above are one tap, which is what matters when
+                # a driver is twenty minutes out. This is for the person who
+                # wants to see the rest of their day before answering.
+                {
+                    "type": "button",
+                    "text": {"type": "plain_text", "text": "See my shifts"},
+                    "url": identity_link(employee, settings),
+                    "action_id": f"my_shifts_{offer.id}",
                 },
             ],
         },

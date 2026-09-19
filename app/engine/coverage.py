@@ -15,6 +15,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
+from app.clock import to_local
 from app.config import Settings
 from app.engine import candidates as ranking
 from app.engine import guardrails
@@ -244,7 +245,10 @@ def accept_offer(
             f"{employee.full_name} is covering '{task.title}'"
             + (f" for order {task.order.code}" if task.order else ""),
             settings,
-            [f"Responded {now:%H:%M} UTC, {len(losers)} other ask(s) stood down."],
+            [
+                f"Responded {to_local(now, settings.business_tz):%H:%M}, "
+                f"{len(losers)} other ask(s) stood down."
+            ],
         )
     )
 
@@ -380,7 +384,7 @@ def widen_or_escalate(
             offer.responded_at = now
 
     reason = (
-        f"no answer and the driver is due at {task.deadline:%H:%M}"
+        f"no answer and the driver is due at {to_local(task.deadline, settings.business_tz):%H:%M}"
         if out_of_time
         else "everyone asked has declined and nobody else is eligible"
     )

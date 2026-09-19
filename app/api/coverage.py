@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, Query
-from fastapi.responses import HTMLResponse
+from urllib.parse import quote
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
+from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -12,7 +14,7 @@ from app.api.schemas import CoverageOut, CoverageReply, CoverageReplyResult
 from app.db import get_session
 from app.engine import coverage as coverage_engine
 from app.models.coverage import CoverageOffer, CoverageRequest
-from app.tokens import TokenError, parse_token
+from app.tokens import TokenError, make_identity_token, parse_token
 
 router = APIRouter(tags=["coverage"], prefix="/coverage")
 
@@ -33,19 +35,23 @@ def list_coverage(
     return list(session.scalars(query))
 
 
-@router.get("/respond", response_class=HTMLResponse)
+@router.get("/respond")
 def respond_via_link(
     token: str = Query(..., description="Signed, expiring token from the Slack message"),
     session: Session = Depends(get_session),
     settings=Depends(settings_dep),
     notifier=Depends(notifier_dep),
     now=Depends(now_dep),
-) -> HTMLResponse:
+) -> Response:
     """The endpoint behind the buttons in a cover request.
 
     This exists so the system works before anyone has configured a Slack app:
     a signed URL button needs no interactivity endpoint registered with Slack,
     only this service being reachable.
+
+    A reply lands the person on their own page rather than a dead-end card:
+    they have just agreed to come in, and the next thing they need is the rest
+    of their day. Only a link we cannot pin to a person stops at a card.
     """
     try:
         parsed = parse_token(token, settings.coverage_link_secret)
@@ -57,8 +63,10 @@ def respond_via_link(
         return _page("Not found", "That cover request no longer exists.", ok=False, status_code=404)
 
     outcome = _apply(session, offer, parsed.action == "accept", notifier, settings, now)
-    heading = "Thanks!" if outcome.ok else "Nothing to do"
-    return _page(heading, outcome.message, ok=outcome.ok)
+    identity = make_identity_token(
+        offer.employee_id, settings.coverage_link_secret, settings.coverage_link_ttl_minutes
+    )
+    return RedirectResponse(f"/me?token={identity}&msg={quote(outcome.message)}", status_code=303)
 
 
 @router.get("/{request_id}", response_model=CoverageOut)

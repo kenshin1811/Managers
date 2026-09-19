@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.clock import to_local
 from app.config import Settings
 from app.engine import candidates as ranking
 from app.engine.escalation import escalate, summarise_blockers
@@ -337,7 +338,10 @@ def _open_coverage_request(
         task_id=task.id,
         leave_request_id=plan.leave_request_id,
         vacating_employee_id=plan.employee_id,
-        reason=f"{plan.employee_name} is on leave from {plan.leave_starts_at:%H:%M}",
+        # No time baked in on purpose. Every surface that shows this sentence
+        # already shows the job's own times beside it, and a clock reading
+        # frozen into a string is one that cannot follow the reader's timezone.
+        reason=f"{plan.employee_name} is on leave",
         status=CoverageStatus.OPEN,
         wave=1,
         created_at=now,
@@ -432,7 +436,8 @@ def execute_plan(
                             if task_plan.impact.order_code
                             else ""
                         )
-                        + f" - {plan.employee_name} is on leave. {urgency} {deadline:%H:%M}."
+                        + f" - {plan.employee_name} is on leave. {urgency} "
+                        + f"{to_local(deadline, settings.business_tz):%H:%M}."
                     ),
                     subject_type="task",
                     subject_id=task.id,
