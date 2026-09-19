@@ -443,3 +443,93 @@ section { margin-bottom: 52px; }
   .row { padding: 14px 16px; }
   .cover-head, .asked { padding-left: 16px; padding-right: 16px; }
 }
+
+
+/* ==========================================================================
+   The employee page.
+
+   Read one-handed, standing up, between two jobs -- so: one column, large
+   touch targets, and the only urgent thing at the top. The manager's
+   dashboard is a wide screen; this is not.
+   ========================================================================== */
+
+.me-page { padding-block: 28px 64px; }
+
+.me-hero { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.me-hero h1 { font-size: clamp(26px, 7vw, 34px); }
+.me-sub { color: var(--text-2); font-size: 15px; margin-bottom: 28px; }
+
+.person {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--surface-2); border-radius: 980px; padding: 4px 6px 4px 14px;
+}
+.person label { font-size: 13px; color: var(--text-2); }
+.person select {
+  appearance: none; border: none; background: var(--surface);
+  font: inherit; font-size: 14px; font-weight: 500; color: var(--text);
+  border-radius: 980px; padding: 6px 12px; cursor: pointer; max-width: 46vw;
+}
+.person select:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--blue) 45%, transparent); outline-offset: 2px;
+}
+
+/* The one thing on this page that is actually urgent. */
+.ask {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  border-top: 4px solid var(--blue);
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+.ask.is-urgent { border-top-color: var(--red-bright); }
+.ask-body { padding: 20px 22px 4px; }
+.ask h2 { font-size: 20px; line-height: 1.25; }
+.ask dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 16px; margin: 16px 0 4px; }
+.ask dt { font-size: 13px; color: var(--text-3); }
+.ask dd { font-size: 14px; font-weight: 500; }
+.ask .why { font-size: 13px; color: var(--text-2); margin: 12px 0 0; }
+.ask-actions { display: grid; gap: 10px; padding: 18px 22px 22px; }
+/* Same shape, but inside a card that already has its own padding. */
+.stacked-actions { display: grid; gap: 10px; padding-top: 18px; }
+
+.btn-big { padding: 15px 22px; font-size: 17px; width: 100%; }
+
+.settled { padding: 18px 22px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+.hours-card { padding: 20px 22px; }
+.hours-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.hours-row + .hours-row { margin-top: 14px; }
+.hours-num { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.hours-card .meter { width: 100%; margin: 8px 0 0; }
+
+.leave-form { display: grid; gap: 12px; padding: 20px 22px; }
+.leave-form label { font-size: 13px; color: var(--text-2); display: grid; gap: 5px; }
+.leave-form input, .leave-form select, .leave-form textarea {
+  font: inherit; font-size: 16px; color: var(--text);
+  background: var(--surface-2); border: 1px solid var(--separator);
+  border-radius: var(--radius-sm); padding: 11px 12px; width: 100%;
+}
+.leave-form textarea { resize: vertical; min-height: 64px; }
+.leave-form input:focus-visible, .leave-form select:focus-visible, .leave-form textarea:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--blue) 45%, transparent); outline-offset: 1px;
+}
+
+.agent-line {
+  display: flex; align-items: center; gap: 9px;
+  font-size: 13px; color: var(--text-2);
+  padding: 16px 0 0; border-top: 1px solid var(--separator); margin-top: 8px;
+}
+.agent-line .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-3); flex: none; }
+.agent-line.is-active .dot { background: var(--green-bright); }
+.agent-line.is-stalled { color: var(--red); }
+.agent-line.is-stalled .dot { background: var(--red-bright); }
+
+.note { font-size: 13px; color: var(--text-3); padding: 14px 22px; }
+.note-flush { padding: 14px 0 0; }
+
+@media (min-width: 700px) {
+  .ask-actions { grid-template-columns: 1fr 1fr; }
+  .stacked-actions { justify-items: start; }
+  .btn-big { width: auto; }
+}

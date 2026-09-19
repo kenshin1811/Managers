@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>My shifts</title>
+<link rel="stylesheet" href="/static/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9673;</text></svg>">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="wordmark">My shifts</span>
+    <div class="nav-right">
+      <span class="person" id="person" hidden>
+        <label for="person-select">Viewing as</label>
+        <select id="person-select" aria-label="Which employee to view as"></select>
+      </span>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap me-page">
+
+  <header>
+    <div class="me-hero">
+      <h1 id="greeting">Loading…</h1>
+      <span class="tag" id="where" hidden></span>
+    </div>
+    <p class="me-sub" id="me-sub">&nbsp;</p>
+  </header>
+
+  <section id="asks-section" hidden>
+    <div class="section-head">
+      <h2>Can you cover?</h2>
+      <p>First to answer gets it. If nobody does, a manager is told.</p>
+    </div>
+    <div id="asks"></div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Your jobs</h2></div>
+    <div class="card list" id="jobs"></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Your hours</h2>
+      <p>These are the numbers the system checks before it asks you to stay on.</p>
+    </div>
+    <div class="card hours-card" id="hours"></div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Time off</h2></div>
+    <div class="card" id="leave"></div>
+  </section>
+
+  <footer>
+    <div class="agent-line" id="agent-line"><i class="dot"></i><span id="agent-text">Checking…</span></div>
+  </footer>
+
+</main>
+
+<div class="toast" id="toast" hidden></div>
+<script src="/static/common.js"></script>
+<script src="/static/me.js"></script>
+</body>
+</html>
