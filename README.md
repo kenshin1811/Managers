@@ -18,11 +18,14 @@ The scenario the whole design is built around:
 ## Try it
 
 **Click through it, install nothing** —
-[a walkthrough of the dashboard](https://claude.ai/artifact/Ln7bgLhkcjNAEuzVs21kNm).
-Every figure, name, fit score and rejection reason in it came out of the real
-engine: `python -m app.sim.capture` runs the thing and records what it decided,
-and the page replays those steps. It is a recording, not a live server, so it
-only follows paths that were recorded.
+[a walkthrough of both screens](https://claude.ai/artifact/Ln7bgLhkcjNAEuzVs21kNm).
+Switch between the manager's dashboard and an employee's page to see the same
+moment from both sides: accept a cover request as Luis, then flip to the
+manager and watch the job board change. Every figure, name, fit score and
+rejection reason in it came out of the real engine —
+`python -m app.sim.capture` runs the thing and records what it decided, and the
+page replays those steps. It is a recording, not a live server, so it only
+follows paths that were recorded.
 
 **Run the real one** — one command, from nothing:
 
@@ -52,6 +55,30 @@ python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"
 
 Out of the box `DRY_RUN=true` and no Slack token is set, so every message is
 logged instead of delivered. Copy `.env.example` to `.env` to change anything.
+
+## Two screens
+
+**The manager's dashboard** (`/`) answers one question before anything else:
+**is the agent actually working?**
+
+**The employee's page** (`/me`) is the other half, and the one that drives the
+agent. It shows one person their own work and nothing else: cover requests
+addressed to them at the top with a countdown to escalation, their jobs with
+driver times, their hours against the limits the engine enforces, clock in and
+out, and a form to request time off. It is built for a phone held in one hand,
+because that is where it will be read.
+
+What it deliberately does not show: a colleague's hours, the decision log, or
+what the engine scored the other people it asked. An employee is told *whose*
+job they are covering, because they may have to hand it back — but nothing
+about that person beyond the fact they are away. `tests/test_me.py` is mostly
+about keeping that line where it is.
+
+Identity has no login behind it yet. In dry run the page offers a person
+picker so you can look around; anywhere else it requires the signed link the
+cover request carried, and the picker is refused outright. A signed link
+proves we sent it to that person — it is not authentication, and anyone
+holding the link can use it.
 
 ## The dashboard
 
@@ -200,7 +227,8 @@ Two reply paths:
 | `GET /coverage`, `GET /coverage/respond?token=…`, `POST /coverage/{id}/reply` | Cover requests and replies |
 | `POST /coverage/sweep` | Run the timeout checks now |
 | `GET /decisions`, `POST /decisions/{id}/override` | Audit log and manager override |
-| `GET /api/dashboard` | Everything the dashboard shows, in one payload |
+| `GET /api/dashboard` | Everything the manager's dashboard shows, in one payload |
+| `GET /api/me/{id}` | One employee's own view — their work, their hours, nothing else |
 | `POST /api/demo/reset`, `POST /api/demo/leave` | Load and run the demo (dry run only) |
 
 A background sweep (`app/scheduler.py`, every 60s) widens the search when a
@@ -210,7 +238,7 @@ looks exactly like everything being fine.
 ## Testing
 
 ```bash
-.venv/bin/python -m pytest        # 120 tests
+.venv/bin/python -m pytest        # 146 tests
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
 ```
 
@@ -224,6 +252,8 @@ notifier. Worth knowing about two of them:
   so the database picks the winner and the loser is told immediately.
 - `tests/test_timeclock.py` ties the two halves together: logged hours are what
   take somebody out of the candidate pool.
+- `tests/test_me.py` guards the line between the two screens, including that a
+  signed link opens its owner's page and refuses anybody else's.
 
 ## Layout
 
@@ -233,7 +263,8 @@ app/models/         SQLAlchemy models, including the audit trail
 app/api/            FastAPI routers
 app/notifications/  Notifier protocol, Slack and console implementations
 app/sim/            seeded kitchen and the three scenarios
-app/web/            the dashboard: index.html, styles.css, app.js
+app/web/            both screens: index.html, me.html, styles.css,
+                    common.js (shared), app.js, me.js
 tools/              build the published walkthrough from the live dashboard
 ```
 

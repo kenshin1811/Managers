@@ -7,7 +7,7 @@ import hmac
 import json
 import time
 from datetime import timedelta
-from urllib.parse import urlencode
+from urllib.parse import parse_qs, unquote, urlencode, urlparse
 
 import pytest
 from fastapi.testclient import TestClient
@@ -19,7 +19,7 @@ from app.main import create_app
 from app.models.coverage import CoverageRequest
 from app.models.enums import CoverageStatus
 from app.sim.seed import at
-from app.tokens import make_token
+from app.tokens import make_token, parse_identity_token
 
 
 @pytest.fixture
@@ -166,9 +166,20 @@ def test_signed_link_accepts_cover_without_any_slack_setup(
     offer = next(o for o in request.offers if o.employee_id == short_staffed.employee_id("luis"))
 
     token = make_token(offer.id, "accept", settings.coverage_link_secret, 60)
-    page = client.get("/coverage/respond", params={"token": token})
-    assert page.status_code == 200
-    assert "covering" in page.text
+    hop = client.get("/coverage/respond", params={"token": token}, follow_redirects=False)
+
+    # Answering lands them on their own page, carrying an identity link and
+    # the outcome -- they have just agreed to come in, and the next thing they
+    # need is the rest of their day, not a dead-end card.
+    assert hop.status_code == 303
+    destination = hop.headers["location"]
+    assert destination.startswith("/me?token=")
+    assert "covering" in unquote(destination)
+
+    identity = parse_qs(urlparse(destination).query)["token"][0]
+    assert parse_identity_token(identity, settings.coverage_link_secret).employee_id == (
+        short_staffed.employee_id("luis")
+    )
 
     assert client.get(f"/coverage/{request.id}").json()["status"] == "filled"
     assert client.get(f"/tasks/{request.task_id}").json()["assignee_id"] == (
