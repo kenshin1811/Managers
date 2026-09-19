@@ -15,6 +15,27 @@ The scenario the whole design is built around:
 > qualified and available, reassign the job, tell everyone involved, and
 > escalate if it can't be solved safely — within minutes.
 
+## Try it
+
+**Click through it, install nothing** —
+[a walkthrough of the dashboard](https://claude.ai/artifact/Ln7bgLhkcjNAEuzVs21kNm).
+Every figure, name, fit score and rejection reason in it came out of the real
+engine: `python -m app.sim.capture` runs the thing and records what it decided,
+and the page replays those steps. It is a recording, not a live server, so it
+only follows paths that were recorded.
+
+**Run the real one** — one command, from nothing:
+
+```bash
+git clone https://github.com/kenshin1811/Managers.git && cd Managers
+./demo.sh              # or: ./demo.sh on_shift
+```
+
+That builds the virtualenv, starts the service, loads a kitchen timed to the
+current moment, sets the engine off and opens the dashboard. `Ctrl+C` stops it
+and cleans up. Nothing is sent anywhere: `DRY_RUN` is on by default, so
+messages are logged instead.
+
 ## Quick start
 
 ```bash
@@ -26,6 +47,8 @@ python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"
 # Or watch it decide in the terminal, with no server at all.
 .venv/bin/python -m app.sim.scenario
 ```
+
+`make help` lists the shortcuts: `make demo`, `test`, `lint`, `sim`, `replay`.
 
 Out of the box `DRY_RUN=true` and no Slack token is set, so every message is
 logged instead of delivered. Copy `.env.example` to `.env` to change anything.
@@ -187,7 +210,7 @@ looks exactly like everything being fine.
 ## Testing
 
 ```bash
-.venv/bin/python -m pytest        # 108 tests
+.venv/bin/python -m pytest        # 120 tests
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
 ```
 
@@ -211,7 +234,15 @@ app/api/            FastAPI routers
 app/notifications/  Notifier protocol, Slack and console implementations
 app/sim/            seeded kitchen and the three scenarios
 app/web/            the dashboard: index.html, styles.css, app.js
+tools/              build the published walkthrough from the live dashboard
 ```
+
+The published walkthrough is not a second copy of the UI. `app/sim/capture.py`
+records the real engine's output, `app/web/replay.js` serves those recordings
+where `fetch` would have gone (one branch, in `api()`), and
+`tools/build_replay.py` inlines the dashboard's own HTML, CSS and JavaScript
+around them. Change the dashboard, run `make replay`, and the walkthrough
+follows — there is no duplicate to drift.
 
 ## Not in this version
 
