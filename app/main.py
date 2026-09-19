@@ -17,6 +17,7 @@ from app.api import (
     demo,
     employees,
     leave,
+    me,
     schedule,
     slack,
     timeclock,
@@ -83,6 +84,7 @@ def create_app() -> FastAPI:
         slack,
         dashboard,
         demo,
+        me,
     ):
         app.include_router(module.router)
 
@@ -90,7 +92,14 @@ def create_app() -> FastAPI:
 
     @app.get("/", include_in_schema=False)
     def home() -> FileResponse:
+        """The manager's dashboard."""
         return FileResponse(WEB_DIR / "index.html")
+
+    @app.get("/me", include_in_schema=False)
+    def employee_page() -> FileResponse:
+        """One employee's own page. Identity is settled client-side, from
+        ?employee= in dry run or the signed ?token= link otherwise."""
+        return FileResponse(WEB_DIR / "me.html")
 
     @app.get("/health", tags=["meta"])
     def health() -> dict:
