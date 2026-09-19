@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Managers</title>
+<link rel="stylesheet" href="/static/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9673;</text></svg>">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="wordmark">Managers</span>
+    <div class="nav-right">
+      <span class="pill" id="nav-pill"><i class="dot"></i><span id="nav-pill-text">Connecting</span></span>
+      <button class="btn btn-quiet" id="demo-toggle" hidden>Demo</button>
+    </div>
+  </div>
+</nav>
+
+<div class="demo-bar" id="demo-bar" hidden>
+  <div class="wrap demo-bar-inner">
+    <div class="demo-copy">
+      <strong>Demo kitchen</strong>
+      <span id="demo-note">Loads six staff, a lunch shift and three orders, timed to right now.</span>
+    </div>
+    <div class="demo-controls">
+      <div class="segmented" id="variant-picker" role="radiogroup" aria-label="Scenario">
+        <button role="radio" aria-checked="true" data-variant="on_shift" class="on">Cover on shift</button>
+        <button role="radio" aria-checked="false" data-variant="call_in">Nobody on shift</button>
+      </div>
+      <button class="btn btn-quiet" id="btn-reset">Load kitchen</button>
+      <button class="btn" id="btn-leave">Mai requests leave</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <header class="hero">
+    <div class="hero-status">
+      <span class="beacon" id="beacon"><i></i></span>
+      <div>
+        <h1 id="hero-title">Checking the agent…</h1>
+        <p class="hero-sub" id="hero-sub">&nbsp;</p>
+      </div>
+    </div>
+    <dl class="hero-facts" id="hero-facts"></dl>
+  </header>
+
+  <section class="stats" id="stats" aria-label="Today"></section>
+
+  <section id="escalations-section" hidden>
+    <div class="section-head">
+      <h2>Needs a manager</h2>
+      <p>The agent stopped here rather than break a staffing rule.</p>
+    </div>
+    <div id="escalations" class="stack"></div>
+  </section>
+
+  <section id="coverage-section" hidden>
+    <div class="section-head">
+      <h2>Cover requests in flight</h2>
+      <p>First person to accept gets it. Everyone else is stood down automatically.</p>
+    </div>
+    <div id="coverage" class="stack"></div>
+  </section>
+
+  <div class="columns">
+    <section>
+      <div class="section-head">
+        <h2>Job board</h2>
+        <p>Live work and who holds it.</p>
+      </div>
+      <div id="board" class="card list"></div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Decisions</h2>
+        <p>Every autonomous action, newest first.</p>
+      </div>
+      <div id="feed" class="card list"></div>
+    </section>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <h2>Staff</h2>
+      <p>Hours against the limits the agent enforces before it asks anyone.</p>
+    </div>
+    <div id="staff" class="card list"></div>
+  </section>
+
+  <footer class="foot">
+    <p id="foot-note">Times shown in the configured business timezone.</p>
+    <p class="muted">Guardrail values are placeholders — review them against local labour rules before this runs on a real roster.</p>
+  </footer>
+
+</main>
+
+<div class="toast" id="toast" hidden></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
