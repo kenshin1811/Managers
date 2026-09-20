@@ -104,9 +104,10 @@ def build() -> str:
     replay_js = read("replay.js")
     app_js = read("app.js")
     me_js = read("me.js")
+    console_js = read("console.js")
     snapshots = json.loads(read("snapshots.json"))
 
-    manager = body_of("index.html", ("common.js", "app.js"))
+    manager = body_of("index.html", ("common.js", "app.js", "console.js"))
     employee = body_of("me.html", ("common.js", "me.js"))
 
     # One toast element between them: two ids would be invalid, and only one
@@ -159,6 +160,9 @@ def build() -> str:
             "})();</script>",
             "<script>(function () {",
             me_js.strip(),
+            "})();</script>",
+            "<script>(function () {",
+            console_js.strip(),
             "})();</script>",
             "",
         ]

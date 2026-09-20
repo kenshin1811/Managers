@@ -145,6 +145,13 @@ function renderAsks(data) {
   $("asks").innerHTML = [...liveCards, ...settledCards].join("");
 }
 
+const MY_STAGE = {
+  retrieve: ["blue", "Freezer"],
+  pack: ["", "Pack + label"],
+  sort: ["purple", "Sort"],
+  dispatch: ["critical", "Load van"],
+};
+
 function renderJobs(data) {
   if (!data.tasks.length) {
     $("jobs").innerHTML = `<p class="empty">Nothing assigned to you right now.</p>`;
@@ -152,16 +159,27 @@ function renderJobs(data) {
   }
   $("jobs").innerHTML = data.tasks
     .map((t) => {
-      const driver = t.pickup_at
-        ? `<span class="tag critical">driver ${t.pickup_at.local}</span>`
+      const [cls, label] = MY_STAGE[t.stage] || ["", t.station || "Job"];
+      const van = t.pickup_at
+        ? `<span class="tag critical">van ${esc(t.pickup_at.local)}</span>`
+        : t.run
+          ? `<span class="tag">${esc(t.run)} van</span>`
+          : "";
+      // Waiting on the stage in front is not idleness, and saying so stops
+      // somebody starting a job whose stock is still in the freezer.
+      const waiting = t.blocked
+        ? `<div class="row-meta">Waiting on: ${esc(t.waiting_for || "the job before it")}</div>`
         : "";
       return `
       <div class="row">
         <div class="row-main">
-          <div class="row-title">${esc(t.title)} ${driver}</div>
-          <div class="row-meta">${t.starts_at.local}–${t.due_at.local}${
-            t.station ? ` · ${esc(t.station)}` : ""
-          }</div>
+          <div class="row-title"><span class="tag ${cls}">${esc(label)}</span> ${esc(t.title)} ${van}</div>
+          <div class="row-meta">
+            ${esc(t.starts_at.local)}–${esc(t.due_at.local)}${
+              t.quantity ? ` · ${t.quantity.toLocaleString()} units` : ""
+            }
+          </div>
+          ${waiting}
         </div>
       </div>`;
     })

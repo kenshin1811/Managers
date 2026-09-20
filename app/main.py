@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.api import (
+    console,
     coverage,
     dashboard,
     decisions,
@@ -85,6 +86,7 @@ def create_app() -> FastAPI:
         dashboard,
         demo,
         me,
+        console,
     ):
         app.include_router(module.router)
 

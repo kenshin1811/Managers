@@ -18,7 +18,7 @@ class Settings(BaseSettings):
 
     # --- infrastructure -------------------------------------------------
     database_url: str = "sqlite:///./managers.db"
-    business_tz: str = "UTC"
+    business_tz: str = "Australia/Melbourne"
     public_base_url: str = "http://localhost:8000"
 
     # --- messaging ------------------------------------------------------
@@ -60,6 +60,23 @@ class Settings(BaseSettings):
 
     coverage_batch_size: int = 3
     """How many people are asked in the first wave."""
+
+    # --- production -------------------------------------------------------
+    dispatch_cutoff_hour: int = 21
+    """Nothing leaves the building after this, any day of the week."""
+
+    retrieve_setup_minutes: float = 8.0
+    retrieve_minutes_per_tray: float = 0.5
+    """Pulling stock is mostly the trip and the staging, not the trays."""
+
+    sort_setup_minutes: float = 6.0
+    sort_seconds_per_unit: float = 1.5
+    dispatch_minutes_per_run: float = 12.0
+    dispatch_minutes_per_stop: float = 4.0
+
+    plan_horizon_hours: int = 14
+    at_risk_margin_minutes: int = 10
+    """Finishing this close to a departure counts as at risk, not on time."""
 
     # --- soft scoring weights (tune without touching code) ---------------
     weight_continuity: float = 40.0

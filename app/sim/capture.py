@@ -38,7 +38,7 @@ from app.models.enums import CoverageStatus, LeaveStatus, LeaveType, OfferStatus
 from app.models.leave import LeaveRequest
 from app.models.state import SWEEP_HEARTBEAT
 from app.notifications import ConsoleNotifier
-from app.sim.seed import ANCHOR, World, at, seed_kitchen
+from app.sim.seed import ANCHOR, World, at, seed_factory
 from app.state import touch
 
 OUTPUT = Path(__file__).resolve().parents[1] / "web" / "snapshots.json"
@@ -99,7 +99,7 @@ def _build(
 ) -> Recorder:
     settings = Settings(
         database_url="sqlite://",
-        business_tz="America/New_York",
+        business_tz="Australia/Melbourne",
         dry_run=True,
         coverage_link_secret="replay-recording",
         public_base_url="https://managers.example.test",
@@ -116,7 +116,7 @@ def _build(
     app.dependency_overrides[notifier_dep] = lambda: notifier
     app.dependency_overrides[now_dep] = lambda: clock.now()
 
-    world = seed_kitchen(
+    world = seed_factory(
         session,
         on_shift_packer=(variant == "on_shift"),
         anchor=anchor,
@@ -137,7 +137,7 @@ def _build(
 def _file_leave(rec: Recorder) -> LeaveRequest:
     now = rec.clock.now()
     leave = LeaveRequest(
-        employee_id=rec.world.employee_id("mai"),
+        employee_id=rec.world.employee_id("shaleen"),
         leave_type=LeaveType.EMERGENCY,
         reason="Family emergency - has to leave now",
         starts_at=now + timedelta(minutes=25),
@@ -183,7 +183,7 @@ def _reply(rec: Recorder, request: CoverageRequest, key: str, accept: bool) -> N
 
 def _pending(rec: Recorder, request_id: int) -> list[tuple[str, int]]:
     """``(seed key, employee id)`` for everyone still waiting to answer."""
-    by_id = {rec.world.employee_id(k): k for k in ("luis", "sam", "tomas", "dev", "priya")}
+    by_id = {rec.world.employee_id(k): k for k in ("valentino", "tavi", "marlo", "ken", "jasoo")}
     offers = rec.session.scalars(
         select(CoverageOffer).where(
             CoverageOffer.coverage_request_id == request_id,
@@ -293,7 +293,7 @@ def capture(anchor: datetime | None = None) -> dict[str, Any]:
         "roster": roster,
         # The walkthrough follows one person's leave; the employee page needs
         # to know whose, so it can offer the form to them and nobody else.
-        "leave_employee_id": rec.world.employee_id("mai"),
+        "leave_employee_id": rec.world.employee_id("shaleen"),
         "me_frames": me_frames,
         "start": {"on_shift": "onshift.0", "call_in": "callin.0"},
         "leave": {"onshift.0": "onshift.1", "callin.0": "callin.1"},

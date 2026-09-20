@@ -14,13 +14,26 @@ from app.models.enums import CoverageStatus, DecisionAction, LeaveStatus, OfferS
 from app.models.task import Task
 from app.models.timeclock import TimeEntry
 from app.sim.seed import SIM_DATE, at
-from tests.test_reassignment import file_leave
+from tests.conftest import a_pack_job
+from tests.test_reassignment import file_leave, nobody_on_shift_can_pack
+
+
+def only_the_packing_job(session, world, now):
+    """One job on the board and nobody rostered who can do it.
+
+    These tests are about the reply, not about the hunt, so the board is kept
+    to a single job: one cover request, one thread to follow.
+    """
+    nobody_on_shift_can_pack(session, world)
+    a_pack_job(session, world)
+    session.commit()
+    return file_leave(session, world, now, board=False)
 
 
 @pytest.fixture
-def open_request(session, settings, short_staffed, notifier, now):
-    """A live cover request for the packing job, with Luis and Sam asked."""
-    leave = file_leave(session, short_staffed, now)
+def open_request(session, settings, world, notifier, now):
+    """A live cover request for the packing job, with Valentino and Tavi asked."""
+    leave = only_the_packing_job(session, world, now)
     reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
     notifier.clear()
@@ -43,28 +56,28 @@ def offer_for(session, request, world, key) -> CoverageOffer:
 
 
 def test_accepting_assigns_the_task_and_stands_everyone_else_down(
-    session, settings, short_staffed, notifier, now, open_request
+    session, settings, world, notifier, now, open_request
 ):
-    luis = offer_for(session, open_request, short_staffed, "luis")
+    valentino = offer_for(session, open_request, world, "valentino")
     outcome = coverage_engine.accept_offer(
-        session, luis, notifier, settings, now + timedelta(minutes=3)
+        session, valentino, notifier, settings, now + timedelta(minutes=3)
     )
 
     assert outcome.ok and outcome.status == "accepted"
     session.refresh(open_request)
     assert open_request.status == CoverageStatus.FILLED
-    assert open_request.filled_by_id == short_staffed.employee_id("luis")
+    assert open_request.filled_by_id == world.employee_id("valentino")
 
     task = session.get(Task, open_request.task_id)
-    assert task.assignee_id == short_staffed.employee_id("luis")
+    assert task.assignee_id == world.employee_id("valentino")
 
-    sam = offer_for(session, open_request, short_staffed, "sam")
-    assert sam.status == OfferStatus.SUPERSEDED
-    assert any("Sam" not in m.text and "covering" in m.text for m in notifier.sent)
+    tavi = offer_for(session, open_request, world, "tavi")
+    assert tavi.status == OfferStatus.SUPERSEDED
+    assert any("Tavi" not in m.text and "covering" in m.text for m in notifier.sent)
 
 
 def test_the_leave_is_approved_only_once_cover_is_secured(
-    session, settings, short_staffed, notifier, now, open_request
+    session, settings, world, notifier, now, open_request
 ):
     leave = session.scalars(
         select(
@@ -74,8 +87,8 @@ def test_the_leave_is_approved_only_once_cover_is_secured(
     ).one()
     assert leave.status == LeaveStatus.PENDING_COVERAGE
 
-    luis = offer_for(session, open_request, short_staffed, "luis")
-    coverage_engine.accept_offer(session, luis, notifier, settings, now + timedelta(minutes=3))
+    valentino = offer_for(session, open_request, world, "valentino")
+    coverage_engine.accept_offer(session, valentino, notifier, settings, now + timedelta(minutes=3))
 
     session.refresh(leave)
     assert leave.status == LeaveStatus.APPROVED
@@ -83,42 +96,40 @@ def test_the_leave_is_approved_only_once_cover_is_secured(
 
 
 def test_using_the_same_link_twice_changes_nothing(
-    session, settings, short_staffed, notifier, now, open_request
+    session, settings, world, notifier, now, open_request
 ):
-    luis = offer_for(session, open_request, short_staffed, "luis")
-    coverage_engine.accept_offer(session, luis, notifier, settings, now)
+    valentino = offer_for(session, open_request, world, "valentino")
+    coverage_engine.accept_offer(session, valentino, notifier, settings, now)
     before = len(notifier.sent)
 
-    again = coverage_engine.accept_offer(session, luis, notifier, settings, now)
+    again = coverage_engine.accept_offer(session, valentino, notifier, settings, now)
     assert again.ok and again.status == "accepted"
     assert len(notifier.sent) == before, "a replay must not message anyone a second time"
 
 
 def test_a_late_acceptance_is_told_someone_else_got_there_first(
-    session, settings, short_staffed, notifier, now, open_request
+    session, settings, world, notifier, now, open_request
 ):
-    luis = offer_for(session, open_request, short_staffed, "luis")
-    sam = offer_for(session, open_request, short_staffed, "sam")
-    coverage_engine.accept_offer(session, luis, notifier, settings, now)
+    valentino = offer_for(session, open_request, world, "valentino")
+    tavi = offer_for(session, open_request, world, "tavi")
+    coverage_engine.accept_offer(session, valentino, notifier, settings, now)
 
-    outcome = coverage_engine.accept_offer(session, sam, notifier, settings, now)
+    outcome = coverage_engine.accept_offer(session, tavi, notifier, settings, now)
     assert not outcome.ok
     assert outcome.status == "already_filled"
-    assert session.get(Task, open_request.task_id).assignee_id == (
-        short_staffed.employee_id("luis")
-    )
+    assert session.get(Task, open_request.task_id).assignee_id == (world.employee_id("valentino"))
 
 
 def test_a_volunteer_who_would_break_a_rule_is_refused_and_escalated(
-    session, settings, short_staffed, notifier, now, open_request
+    session, settings, world, notifier, now, open_request
 ):
     """Minutes passed between the ask and the answer. The rules are re-checked."""
-    luis_id = short_staffed.employee_id("luis")
+    valentino_id = world.employee_id("valentino")
     for offset in range(1, 5):
         day = SIM_DATE - timedelta(days=offset)
         session.add(
             TimeEntry(
-                employee_id=luis_id,
+                employee_id=valentino_id,
                 clock_in=at(8, 0, day=day),
                 clock_out=at(20, 0, day=day),
                 source="kiosk",
@@ -126,8 +137,8 @@ def test_a_volunteer_who_would_break_a_rule_is_refused_and_escalated(
         )
     session.flush()
 
-    luis = offer_for(session, open_request, short_staffed, "luis")
-    outcome = coverage_engine.accept_offer(session, luis, notifier, settings, now)
+    valentino = offer_for(session, open_request, world, "valentino")
+    outcome = coverage_engine.accept_offer(session, valentino, notifier, settings, now)
 
     assert not outcome.ok and outcome.status == "blocked"
     assert any("weekly limit" in reason for reason in outcome.blockers)
@@ -139,23 +150,21 @@ def test_a_volunteer_who_would_break_a_rule_is_refused_and_escalated(
 # --- declining --------------------------------------------------------------
 
 
-def test_one_decline_leaves_the_request_open(
-    session, settings, short_staffed, notifier, now, open_request
-):
-    luis = offer_for(session, open_request, short_staffed, "luis")
-    outcome = coverage_engine.decline_offer(session, luis, notifier, settings, now)
+def test_one_decline_leaves_the_request_open(session, settings, world, notifier, now, open_request):
+    valentino = offer_for(session, open_request, world, "valentino")
+    outcome = coverage_engine.decline_offer(session, valentino, notifier, settings, now)
 
     assert outcome.ok and outcome.status == "declined"
     session.refresh(open_request)
     assert open_request.status == CoverageStatus.OPEN
-    assert luis.status == OfferStatus.DECLINED
+    assert valentino.status == OfferStatus.DECLINED
 
 
 def test_the_last_decline_escalates_rather_than_going_quiet(
-    session, settings, short_staffed, notifier, now, open_request
+    session, settings, world, notifier, now, open_request
 ):
-    for key in ("luis", "sam"):
-        offer = offer_for(session, open_request, short_staffed, key)
+    for key in ("valentino", "tavi"):
+        offer = offer_for(session, open_request, world, key)
         coverage_engine.decline_offer(session, offer, notifier, settings, now)
 
     session.refresh(open_request)
@@ -166,11 +175,9 @@ def test_the_last_decline_escalates_rather_than_going_quiet(
     assert "declined" in escalations[-1].text or "no cover" in escalations[-1].text.lower()
 
 
-def test_declining_widens_the_search_when_somebody_is_left(
-    session, settings, short_staffed, notifier, now
-):
+def test_declining_widens_the_search_when_somebody_is_left(session, settings, world, notifier, now):
     settings.coverage_batch_size = 1
-    leave = file_leave(session, short_staffed, now)
+    leave = only_the_packing_job(session, world, now)
     reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
     request = session.scalars(
@@ -184,14 +191,15 @@ def test_declining_widens_the_search_when_somebody_is_left(
     assert request.status == CoverageStatus.OPEN
     assert request.wave == 2
     assert len(request.offers) == 2
-    assert request.offers[-1].employee_id == short_staffed.employee_id("sam")
+    # Tavi was asked first on fairness; Valentino is the one left.
+    assert request.offers[-1].employee_id == world.employee_id("valentino")
 
 
 # --- timeouts ---------------------------------------------------------------
 
 
 def test_the_sweep_ignores_a_request_still_in_its_window(
-    session, settings, short_staffed, notifier, now, open_request
+    session, settings, world, notifier, now, open_request
 ):
     records = coverage_engine.sweep_open_requests(session, notifier, settings, now)
     assert records == []
@@ -200,9 +208,9 @@ def test_the_sweep_ignores_a_request_still_in_its_window(
 
 
 def test_silence_becomes_an_escalation_before_the_driver_arrives(
-    session, settings, short_staffed, notifier, now, open_request
+    session, settings, world, notifier, now, open_request
 ):
-    pickup = short_staffed.orders["1043"].pickup_at
+    pickup = world.orders["fitzroy"].pickup_at
     too_late = pickup - timedelta(minutes=settings.escalation_lead_minutes - 1)
 
     records = coverage_engine.sweep_open_requests(session, notifier, settings, too_late)
@@ -215,11 +223,11 @@ def test_silence_becomes_an_escalation_before_the_driver_arrives(
 
 
 def test_a_timeout_widens_the_pool_while_there_is_still_time(
-    session, settings, short_staffed, notifier, now
+    session, settings, world, notifier, now
 ):
     settings.coverage_batch_size = 1
     settings.coverage_response_timeout_minutes = 5
-    leave = file_leave(session, short_staffed, now)
+    leave = only_the_packing_job(session, world, now)
     reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
     request = session.scalars(

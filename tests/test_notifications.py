@@ -18,6 +18,7 @@ from app.notifications.templates import (
     reassignment_notice,
 )
 from app.tokens import TokenError, make_token, parse_token
+from tests.conftest import a_pack_job
 
 # --- choosing a notifier ----------------------------------------------------
 
@@ -52,15 +53,15 @@ def test_console_notifier_records_instead_of_sending():
 
 
 @pytest.fixture
-def request_with_offer(session, settings, short_staffed, notifier, now):
+def request_with_offer(session, settings, world, notifier, now):
     from sqlalchemy import select
 
     from app.engine import reassignment
     from app.models.coverage import CoverageRequest
     from app.models.enums import CoverageStatus
-    from tests.test_reassignment import file_leave
+    from tests.test_coverage import only_the_packing_job
 
-    leave = file_leave(session, short_staffed, now)
+    leave = only_the_packing_job(session, world, now)
     reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
     request = session.scalars(
@@ -70,7 +71,7 @@ def request_with_offer(session, settings, short_staffed, notifier, now):
 
 
 def test_a_cover_request_can_be_answered_from_the_lock_screen(
-    session, settings, short_staffed, request_with_offer
+    session, settings, world, request_with_offer
 ):
     """The plain-text fallback has to carry the whole question on its own."""
     request, offer = request_with_offer
@@ -79,7 +80,7 @@ def test_a_cover_request_can_be_answered_from_the_lock_screen(
 
     assert message.kind == "cover_request"
     assert message.channel == offer.employee.slack_user_id
-    for expected in ("Cover needed", "Pack order 1043", "20 min", "14:50"):
+    for expected in ("Cover needed", "Pack and label 90 jam donut", "25 min", "18:00"):
         assert expected in message.text
 
 
@@ -95,20 +96,19 @@ def test_a_cover_request_carries_working_accept_and_decline_links(settings, requ
     assert parsed.action == "accept"
 
 
-def test_a_message_still_names_somebody_without_a_slack_account(session, settings, short_staffed):
+def test_a_message_still_names_somebody_without_a_slack_account(session, settings, world):
     """In dry run you want to see who would have been contacted."""
-    from app.models.task import Task
 
-    employee = short_staffed.employees["luis"]
+    employee = world.employees["valentino"]
     employee.slack_user_id = None
-    task = session.get(Task, short_staffed.tasks["pack_1043"].id)
+    task = a_pack_job(session, world)
     message = reassignment_notice(employee, task, settings, reason="testing")
-    assert message.channel == "@luis"
+    assert message.channel == "@valentino"
 
 
 def test_an_escalation_is_marked_urgent_and_explains_itself(settings):
     message = escalation(
-        "No cover for 'Pack order 1043'",
+        "No cover for 'Pack and label 90 jam donut'",
         settings,
         ["3 x not trained for it", "1 x would exceed the weekly hours limit"],
         urgent=True,
@@ -120,12 +120,11 @@ def test_an_escalation_is_marked_urgent_and_explains_itself(settings):
     assert "rather than break a staffing rule" in rendered
 
 
-def test_a_stood_down_colleague_is_told_who_took_it(session, short_staffed):
-    from app.models.task import Task
+def test_a_stood_down_colleague_is_told_who_took_it(session, world):
 
-    task = session.get(Task, short_staffed.tasks["pack_1043"].id)
-    message = coverage_superseded(short_staffed.employees["sam"], task, "Luis Ferrer")
-    assert "Luis Ferrer" in message.text
+    task = a_pack_job(session, world)
+    message = coverage_superseded(world.employees["tavi"], task, "Valentino")
+    assert "Valentino" in message.text
     assert "Thanks" in message.text
 
 

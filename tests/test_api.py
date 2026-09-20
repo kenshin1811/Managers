@@ -52,8 +52,8 @@ def test_full_round_trip_from_empty_database(client, session, notifier):
     """Skills, staff, a shift, an order, a job, hours, leave, cover, audit."""
     assert client.post("/skills", json={"code": "pack", "name": "Packing"}).status_code == 201
 
-    mai = client.post("/employees", json={"full_name": "Mai Tran", "slack_user_id": "U_MAI"}).json()
-    dev = client.post("/employees", json={"full_name": "Dev Osei", "slack_user_id": "U_DEV"}).json()
+    mai = client.post("/employees", json={"full_name": "Shaleen", "slack_user_id": "U_MAI"}).json()
+    dev = client.post("/employees", json={"full_name": "Ken", "slack_user_id": "U_DEV"}).json()
     for person in (mai, dev):
         response = client.post(
             f"/employees/{person['id']}/skills", json={"skill_code": "pack", "proficiency": 4}
@@ -120,7 +120,7 @@ def test_full_round_trip_from_empty_database(client, session, notifier):
     assert plan["fully_resolved"] is True
     task_plan = plan["task_plans"][0]
     assert task_plan["action"] == "auto_reassigned"
-    assert task_plan["chosen"]["employee_name"] == "Dev Osei"
+    assert task_plan["chosen"]["employee_name"] == "Ken"
     assert task_plan["task"]["critical"] is True
 
     assert client.get(f"/tasks/{task['id']}").json()["assignee_id"] == dev["id"]
@@ -152,7 +152,7 @@ def test_signed_link_accepts_cover_without_any_slack_setup(
     response = client.post(
         "/leave-requests",
         json={
-            "employee_id": short_staffed.employee_id("mai"),
+            "employee_id": short_staffed.employee_id("shaleen"),
             "starts_at": iso(at(14, 30)),
             "ends_at": iso(at(18, 0)),
             "leave_type": "emergency",
@@ -163,7 +163,9 @@ def test_signed_link_accepts_cover_without_any_slack_setup(
     request = session.scalars(
         select(CoverageRequest).where(CoverageRequest.status == CoverageStatus.OPEN)
     ).one()
-    offer = next(o for o in request.offers if o.employee_id == short_staffed.employee_id("luis"))
+    offer = next(
+        o for o in request.offers if o.employee_id == short_staffed.employee_id("valentino")
+    )
 
     token = make_token(offer.id, "accept", settings.coverage_link_secret, 60)
     hop = client.get("/coverage/respond", params={"token": token}, follow_redirects=False)
@@ -178,12 +180,12 @@ def test_signed_link_accepts_cover_without_any_slack_setup(
 
     identity = parse_qs(urlparse(destination).query)["token"][0]
     assert parse_identity_token(identity, settings.coverage_link_secret).employee_id == (
-        short_staffed.employee_id("luis")
+        short_staffed.employee_id("valentino")
     )
 
     assert client.get(f"/coverage/{request.id}").json()["status"] == "filled"
     assert client.get(f"/tasks/{request.task_id}").json()["assignee_id"] == (
-        short_staffed.employee_id("luis")
+        short_staffed.employee_id("valentino")
     )
 
 
@@ -204,7 +206,7 @@ def test_replying_for_someone_who_was_never_asked_is_a_404(client, session, shor
     client.post(
         "/leave-requests",
         json={
-            "employee_id": short_staffed.employee_id("mai"),
+            "employee_id": short_staffed.employee_id("shaleen"),
             "starts_at": iso(at(14, 30)),
             "ends_at": iso(at(18, 0)),
         },
@@ -214,7 +216,7 @@ def test_replying_for_someone_who_was_never_asked_is_a_404(client, session, shor
     ).one()
     response = client.post(
         f"/coverage/{request.id}/reply",
-        json={"employee_id": short_staffed.employee_id("priya"), "accept": True},
+        json={"employee_id": short_staffed.employee_id("jasoo"), "accept": True},
     )
     assert response.status_code == 404
 
@@ -223,7 +225,7 @@ def test_the_sweep_can_be_run_on_demand(client, session, short_staffed, clock):
     client.post(
         "/leave-requests",
         json={
-            "employee_id": short_staffed.employee_id("mai"),
+            "employee_id": short_staffed.employee_id("shaleen"),
             "starts_at": iso(at(14, 30)),
             "ends_at": iso(at(18, 0)),
         },
@@ -237,7 +239,7 @@ def test_the_sweep_can_be_run_on_demand(client, session, short_staffed, clock):
 
 
 def test_clocking_in_twice_is_refused(client, world):
-    payload = {"employee_id": world.employee_id("luis"), "at": iso(at(14, 0))}
+    payload = {"employee_id": world.employee_id("valentino"), "at": iso(at(14, 0))}
     assert client.post("/timeclock/clock-in", json=payload).status_code == 201
     assert client.post("/timeclock/clock-in", json=payload).status_code == 409
 
@@ -246,7 +248,7 @@ def test_leave_must_end_after_it_starts(client, world):
     response = client.post(
         "/leave-requests",
         json={
-            "employee_id": world.employee_id("mai"),
+            "employee_id": world.employee_id("shaleen"),
             "starts_at": iso(at(15, 0)),
             "ends_at": iso(at(14, 0)),
         },
@@ -258,7 +260,7 @@ def test_preview_shows_the_plan_without_acting_on_it(client, session, world):
     created = client.post(
         "/leave-requests",
         json={
-            "employee_id": world.employee_id("luis"),
+            "employee_id": world.employee_id("valentino"),
             "starts_at": iso(at(20, 0)),
             "ends_at": iso(at(22, 0)),
         },
@@ -290,7 +292,7 @@ def test_slack_callback_accepts_a_properly_signed_request(client, session, setti
     client.post(
         "/leave-requests",
         json={
-            "employee_id": short_staffed.employee_id("mai"),
+            "employee_id": short_staffed.employee_id("shaleen"),
             "starts_at": iso(at(14, 30)),
             "ends_at": iso(at(18, 0)),
         },
@@ -298,7 +300,9 @@ def test_slack_callback_accepts_a_properly_signed_request(client, session, setti
     request = session.scalars(
         select(CoverageRequest).where(CoverageRequest.status == CoverageStatus.OPEN)
     ).one()
-    offer = next(o for o in request.offers if o.employee_id == short_staffed.employee_id("luis"))
+    offer = next(
+        o for o in request.offers if o.employee_id == short_staffed.employee_id("valentino")
+    )
 
     payload = {
         "user": {"id": "U_LUIS"},
@@ -327,7 +331,7 @@ def test_slack_callback_accepts_a_properly_signed_request(client, session, setti
     assert response.status_code == 200
     assert "covering" in response.json()["text"]
     assert client.get(f"/coverage/{request.id}").json()["filled_by_id"] == (
-        short_staffed.employee_id("luis")
+        short_staffed.employee_id("valentino")
     )
 
 
@@ -338,7 +342,7 @@ def test_slack_callback_will_not_let_one_person_accept_for_another(
     client.post(
         "/leave-requests",
         json={
-            "employee_id": short_staffed.employee_id("mai"),
+            "employee_id": short_staffed.employee_id("shaleen"),
             "starts_at": iso(at(14, 30)),
             "ends_at": iso(at(18, 0)),
         },
@@ -346,7 +350,9 @@ def test_slack_callback_will_not_let_one_person_accept_for_another(
     request = session.scalars(
         select(CoverageRequest).where(CoverageRequest.status == CoverageStatus.OPEN)
     ).one()
-    offer = next(o for o in request.offers if o.employee_id == short_staffed.employee_id("luis"))
+    offer = next(
+        o for o in request.offers if o.employee_id == short_staffed.employee_id("valentino")
+    )
 
     payload = {
         "user": {"id": "U_SOMEONE_ELSE"},

@@ -367,6 +367,8 @@ section { margin-bottom: 52px; }
 .alert .why span::before { content: "— "; color: var(--text-3); }
 
 .cover { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden; }
+/* Van cards share the surface but not the countdown machinery. */
+.run-card .asked-row { border-top: none; }
 .cover-head { padding: 18px 22px 14px; display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
 .cover-head h3 { font-size: 16px; }
 .cover-head .sub { font-size: 13px; color: var(--text-2); margin-top: 3px; }
@@ -533,3 +535,46 @@ section { margin-bottom: 52px; }
   .stacked-actions { justify-items: start; }
   .btn-big { width: auto; }
 }
+
+
+/* ---------- the manager's console ---------- */
+
+.console { padding: 20px 22px 22px; }
+.console-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.console-row input {
+  flex: 1 1 260px; min-width: 0;
+  font: inherit; font-size: 16px; color: var(--text);
+  background: var(--surface-2); border: 1px solid var(--separator);
+  border-radius: 980px; padding: 12px 18px;
+}
+.console-row input:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--blue) 45%, transparent); outline-offset: 1px;
+}
+
+.mic {
+  display: inline-flex; align-items: center; gap: 9px;
+  border: none; border-radius: 980px; cursor: pointer;
+  background: var(--surface-2); color: var(--text);
+  font: inherit; font-size: 15px; font-weight: 500; padding: 11px 18px;
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+  flex: none;
+}
+.mic:hover { background: var(--surface-3); }
+.mic .mic-dot {
+  width: 9px; height: 9px; border-radius: 50%; background: var(--text-3); flex: none;
+}
+.mic.is-live { background: var(--red-bright); color: #fff; }
+.mic.is-live .mic-dot { background: #fff; animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+.console-heard { margin-top: 14px; font-size: 15px; color: var(--text-2); font-style: italic; }
+.console-reply { margin-top: 10px; font-size: 15px; font-weight: 500; }
+.console-reply.is-ok { color: var(--green); }
+.console-reply.is-bad { color: var(--orange); }
+
+.console-hints { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.hint {
+  border: none; background: var(--surface-2); color: var(--text-2);
+  font: inherit; font-size: 12px; padding: 6px 12px; border-radius: 980px; cursor: pointer;
+}
+.hint:hover { background: var(--surface-3); color: var(--text); }

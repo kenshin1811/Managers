@@ -9,6 +9,45 @@ from __future__ import annotations
 from enum import StrEnum
 
 
+class ProductKind(StrEnum):
+    FRESH = "fresh"
+    FROZEN = "frozen"
+
+
+class Channel(StrEnum):
+    RETAIL = "retail"
+    WHOLESALE = "wholesale"
+    INTERNAL = "internal"
+    """The wholesale packer team: a handover, not a delivery."""
+
+
+class Stage(StrEnum):
+    """The pipeline a donut goes through, in order.
+
+    The order is the point: you cannot pack what is still in the freezer, and
+    you cannot load a van with a consignment nobody has sorted. The planner
+    reads these as hard dependencies rather than as labels.
+    """
+
+    RETRIEVE = "retrieve"
+    PACK = "pack"
+    SORT = "sort"
+    DISPATCH = "dispatch"
+
+    @property
+    def order(self) -> int:
+        return {"retrieve": 0, "pack": 1, "sort": 2, "dispatch": 3}[self.value]
+
+    @property
+    def label(self) -> str:
+        return {
+            "retrieve": "Pull from freezer",
+            "pack": "Pack and label",
+            "sort": "Sort to orders",
+            "dispatch": "Load the van",
+        }[self.value]
+
+
 class TaskStatus(StrEnum):
     PENDING = "pending"
     IN_PROGRESS = "in_progress"

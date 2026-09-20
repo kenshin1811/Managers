@@ -22,8 +22,9 @@ from app.models.coverage import CoverageOffer, CoverageRequest
 from app.models.enums import CoverageStatus, OfferStatus
 from app.models.task import Task
 from app.notifications import ConsoleNotifier
-from app.sim.seed import at, seed_kitchen
-from tests.test_reassignment import file_leave
+from app.sim.seed import at, seed_factory
+from tests.conftest import a_pack_job
+from tests.test_reassignment import file_leave, nobody_on_shift_can_pack
 
 
 def test_only_one_of_two_simultaneous_acceptances_wins(tmp_path):
@@ -33,16 +34,19 @@ def test_only_one_of_two_simultaneous_acceptances_wins(tmp_path):
     factory = sessionmaker(bind=engine, expire_on_commit=False, future=True)
     settings = Settings(
         database_url=f"sqlite:///{db_path}",
-        business_tz="America/New_York",
+        business_tz="Australia/Melbourne",
         dry_run=True,
         coverage_link_secret="test-secret",
     )
     notifier = ConsoleNotifier(echo=False)
-    now = at(14, 5)
+    now = at(16, 30)
 
     with factory() as setup:
-        world = seed_kitchen(setup, on_shift_packer=False)
-        leave = file_leave(setup, world, now)
+        world = seed_factory(setup, full_team=True)
+        nobody_on_shift_can_pack(setup, world)
+        a_pack_job(setup, world)
+        setup.commit()
+        leave = file_leave(setup, world, now, board=False)
         reassignment.handle_leave_request(setup, leave, notifier, settings, now)
         setup.commit()
         request_id = setup.scalars(
@@ -55,7 +59,7 @@ def test_only_one_of_two_simultaneous_acceptances_wins(tmp_path):
                     CoverageOffer.employee_id == world.employee_id(key),
                 )
             ).one()
-            for key in ("luis", "sam")
+            for key in ("valentino", "tavi")
         ]
         task_id = setup.get(CoverageRequest, request_id).task_id
 
@@ -102,24 +106,27 @@ def test_the_loser_is_told_immediately_rather_than_left_hanging(tmp_path):
     create_all(engine)
     factory = sessionmaker(bind=engine, expire_on_commit=False, future=True)
     settings = Settings(
-        database_url=f"sqlite:///{db_path}", business_tz="America/New_York", dry_run=True
+        database_url=f"sqlite:///{db_path}", business_tz="Australia/Melbourne", dry_run=True
     )
     notifier = ConsoleNotifier(echo=False)
-    now = at(14, 5)
+    now = at(16, 30)
 
     with factory() as session:
-        world = seed_kitchen(session, on_shift_packer=False)
-        leave = file_leave(session, world, now)
+        world = seed_factory(session, full_team=True)
+        nobody_on_shift_can_pack(session, world)
+        a_pack_job(session, world)
+        session.commit()
+        leave = file_leave(session, world, now, board=False)
         reassignment.handle_leave_request(session, leave, notifier, settings, now)
         session.commit()
         request = session.scalars(
             select(CoverageRequest).where(CoverageRequest.status == CoverageStatus.OPEN)
         ).one()
-        luis, sam = sorted(request.offers, key=lambda o: o.rank)
+        first, second = sorted(request.offers, key=lambda o: o.rank)
 
-        coverage_engine.accept_offer(session, luis, notifier, settings, now)
+        coverage_engine.accept_offer(session, first, notifier, settings, now)
         notifier.clear()
-        outcome = coverage_engine.accept_offer(session, sam, notifier, settings, now)
+        outcome = coverage_engine.accept_offer(session, second, notifier, settings, now)
 
     assert outcome.status == "already_filled"
     assert "already" in outcome.message.lower()

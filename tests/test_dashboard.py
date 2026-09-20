@@ -85,17 +85,17 @@ def test_every_timestamp_carries_utc_and_a_local_rendering(client, world):
 def test_the_board_names_the_person_holding_each_job(client, world):
     board = client.get("/api/dashboard").json()["board"]
     pack = next(t for t in board if t["title"] == "Pack order 1043")
-    assert pack["assignee"] == "Mai Tran"
+    assert pack["assignee"] == "Shaleen"
     assert pack["order_code"] == "1043"
     assert pack["pickup_at"]["local"] == "14:50"
 
 
 def test_staff_carry_their_hours_against_the_limits(client, world):
     staff = client.get("/api/dashboard").json()["staff"]
-    tomas = next(p for p in staff if p["name"] == "Tomas Iglesias")
+    tomas = next(p for p in staff if p["name"] == "Marlo")
     assert tomas["hours_week"] == pytest.approx(48.0, abs=0.5)
     assert tomas["on_shift"] is False
-    dev = next(p for p in staff if p["name"] == "Dev Osei")
+    dev = next(p for p in staff if p["name"] == "Ken")
     assert dev["on_shift"] is True
 
 
@@ -113,7 +113,7 @@ def test_a_cover_request_appears_with_everyone_who_was_asked(
     cover = body["coverage"][0]
     assert cover["status"] == CoverageStatus.OPEN
     assert cover["task_title"] == "Pack order 1043"
-    assert [o["employee_name"] for o in cover["offers"]] == ["Luis Ferrer", "Sam Whitlock"]
+    assert [o["employee_name"] for o in cover["offers"]] == ["Valentino", "Tavi"]
     assert all(o["status"] == "sent" for o in cover["offers"])
 
 

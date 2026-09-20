@@ -22,7 +22,7 @@ from app.engine.snapshot import load_snapshot
 from app.models.audit import DecisionRecord
 from app.models.coverage import CoverageRequest
 from app.models.employee import Employee
-from app.models.enums import CoverageStatus, DecisionAction, TaskStatus
+from app.models.enums import CoverageStatus, DecisionAction, OrderStatus, Stage, TaskStatus
 from app.models.state import SWEEP_HEARTBEAT
 from app.models.task import Task
 from app.scheduler import SWEEP_SECONDS
@@ -69,6 +69,142 @@ def _agent_block(session: Session, settings: Settings, now: datetime) -> dict[st
             "min_rest_hours": settings.min_rest_hours,
         },
     }
+
+
+def _production_block(
+    session: Session, settings: Settings, now: datetime, names: dict[int, str]
+) -> dict[str, Any]:
+    """The floor as it stands: vans, what is left for each, and who is on it.
+
+    Read from the board rather than by re-planning on every poll. The board is
+    what the team is actually working to, and a dashboard that quietly showed
+    a fresher hypothetical would be answering a question nobody asked.
+    """
+    from app.models.destination import Destination
+    from app.models.order import Order
+    from app.models.product import Product
+
+    live = [TaskStatus.PENDING, TaskStatus.IN_PROGRESS, TaskStatus.BLOCKED]
+    tasks = list(
+        session.scalars(
+            select(Task).where(Task.stage.is_not(None)).order_by(Task.starts_at, Task.id)
+        )
+    )
+    destinations = {d.run: d for d in session.scalars(select(Destination))}
+    orders = list(session.scalars(select(Order).where(Order.status == OrderStatus.OPEN)))
+
+    runs: dict[str, dict[str, Any]] = {}
+    for order in orders:
+        run = order.destination.run if order.destination else "unassigned"
+        entry = runs.setdefault(
+            run,
+            {
+                "run": run,
+                "departs_at": order.pickup_at,
+                "stops": [],
+                "outstanding": 0,
+                "ordered": 0,
+                "ready_at": None,
+                "open_tasks": 0,
+                "people": set(),
+            },
+        )
+        entry["departs_at"] = min(entry["departs_at"], order.pickup_at)
+        entry["stops"].append(order.where)
+        entry["outstanding"] += sum(line.outstanding for line in order.lines)
+        entry["ordered"] += order.units
+
+    for task in tasks:
+        entry = runs.get(task.run)
+        if entry is None:
+            continue
+        if task.status in live:
+            entry["open_tasks"] += 1
+            finishes = task.starts_at + timedelta(minutes=task.estimated_minutes)
+            entry["ready_at"] = max(entry["ready_at"] or finishes, finishes)
+            if task.assignee_id:
+                entry["people"].add(names.get(task.assignee_id, "?"))
+
+    margin = timedelta(minutes=settings.at_risk_margin_minutes)
+    run_rows = []
+    for entry in sorted(runs.values(), key=lambda e: e["departs_at"]):
+        ready = entry["ready_at"]
+        if entry["outstanding"] == 0:
+            status = "packed"
+        elif ready is None:
+            status = "unplanned"
+        elif ready > entry["departs_at"]:
+            status = "missed"
+        elif entry["departs_at"] - ready < margin:
+            status = "at_risk"
+        else:
+            status = "on_time"
+        run_rows.append(
+            {
+                "run": entry["run"],
+                "label": destinations.get(entry["run"]).run.title()
+                if destinations.get(entry["run"])
+                else entry["run"].title(),
+                "departs_at": stamp(entry["departs_at"], settings),
+                "ready_at": stamp(ready, settings),
+                "stops": entry["stops"],
+                "ordered": entry["ordered"],
+                "outstanding": entry["outstanding"],
+                "open_tasks": entry["open_tasks"],
+                "people": sorted(entry["people"]),
+                "late_minutes": round((ready - entry["departs_at"]).total_seconds() / 60)
+                if ready and ready > entry["departs_at"]
+                else 0,
+                "status": status,
+            }
+        )
+
+    stages = {}
+    for stage in Stage:
+        of_stage = [t for t in tasks if t.stage == stage]
+        stages[str(stage)] = {
+            "label": stage.label,
+            "open": sum(1 for t in of_stage if t.status in live),
+            "done": sum(1 for t in of_stage if t.status == TaskStatus.DONE),
+            "minutes": round(sum(t.estimated_minutes for t in of_stage if t.status in live)),
+        }
+
+    # What is still owed, by product, across every open order.
+    owed: dict[int, int] = {}
+    for order in orders:
+        for line in order.lines:
+            if line.outstanding:
+                owed[line.product_id] = owed.get(line.product_id, 0) + line.outstanding
+    catalogue = {p.id: p for p in session.scalars(select(Product))}
+    remaining = sorted(
+        (
+            {
+                "product": catalogue[pid].name,
+                "kind": catalogue[pid].kind,
+                "units": units,
+                "minutes": round(catalogue[pid].pack_minutes(units)),
+            }
+            for pid, units in owed.items()
+            if pid in catalogue
+        ),
+        key=lambda row: -row["units"],
+    )
+
+    return {
+        "cutoff": stamp(_day_cutoff(now, settings), settings),
+        "runs": run_rows,
+        "stages": stages,
+        "remaining": remaining,
+        "units_outstanding": sum(row["units"] for row in remaining),
+        "units_ordered": sum(order.units for order in orders),
+    }
+
+
+def _day_cutoff(now: datetime, settings: Settings) -> datetime:
+    local = to_local(now, settings.business_tz)
+    return now + (
+        local.replace(hour=settings.dispatch_cutoff_hour, minute=0, second=0, microsecond=0) - local
+    )
 
 
 @router.get("/dashboard")
@@ -145,6 +281,9 @@ def dashboard(
                 "id": task.id,
                 "title": task.title,
                 "station": task.station,
+                "stage": task.stage,
+                "run": task.run,
+                "quantity": task.quantity,
                 "assignee_id": task.assignee_id,
                 "assignee": names.get(task.assignee_id),
                 "priority": task.priority,
@@ -230,6 +369,7 @@ def dashboard(
             "open_coverage": sum(1 for c in coverage if c["status"] == CoverageStatus.OPEN),
             "needs_manager": sum(1 for c in coverage if c["status"] == CoverageStatus.ESCALATED),
         },
+        "production": _production_block(session, settings, now, names),
         "coverage": coverage,
         "board": board,
         "feed": feed,

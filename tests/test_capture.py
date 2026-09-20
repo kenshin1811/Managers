@@ -37,8 +37,8 @@ def test_the_on_shift_kitchen_moves_the_job_without_asking_anyone(recording):
 
     pack_before = next(t for t in before["board"] if t["title"] == "Pack order 1043")
     pack_after = next(t for t in after["board"] if t["title"] == "Pack order 1043")
-    assert pack_before["assignee"] == "Mai Tran"
-    assert pack_after["assignee"] == "Dev Osei"
+    assert pack_before["assignee"] == "Shaleen"
+    assert pack_after["assignee"] == "Ken"
     assert after["counters"]["auto_reassigned"] >= 1
     assert after["counters"]["open_coverage"] == 0, "nobody's day off should be interrupted"
 
@@ -48,15 +48,15 @@ def test_the_call_in_kitchen_asks_the_two_eligible_packers(recording):
     open_requests = [c for c in frame["coverage"] if c["status"] == "open"]
     assert len(open_requests) == 1
     assert [o["employee_name"] for o in open_requests[0]["offers"]] == [
-        "Luis Ferrer",
-        "Sam Whitlock",
+        "Valentino",
+        "Tavi",
     ]
 
 
 def test_accepting_moves_the_job_and_clears_the_request(recording):
     frame = recording["frames"]["callin.1.luis-accept"]
     pack = next(t for t in frame["board"] if t["title"] == "Pack order 1043")
-    assert pack["assignee"] == "Luis Ferrer"
+    assert pack["assignee"] == "Valentino"
     assert frame["counters"]["open_coverage"] == 0
     assert frame["counters"]["coverage_filled"] >= 1
 
@@ -145,7 +145,7 @@ def test_whoever_was_asked_can_see_it_on_their_own_page(recording):
 def test_the_person_who_left_can_see_who_took_their_work(recording):
     mai = str(recording["leave_employee_id"])
     after = recording["me_frames"]["callin.1.luis-accept"][mai]
-    assert ("Pack order 1043", "Luis Ferrer") in {
+    assert ("Pack order 1043", "Valentino") in {
         (h["task_title"], h["taken_by"]) for h in after["handovers"]
     }
 

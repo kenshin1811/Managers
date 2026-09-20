@@ -11,7 +11,7 @@
 const REFRESH_MS = 3000;
 
 let state = null;
-let variant = "on_shift";
+let variant = "full_team";
 let busy = false;
 
 /* ---------- agent status: the question the page exists to answer ---------- */
@@ -52,18 +52,98 @@ function renderAgent(agent) {
     `Times shown in ${agent.business_tz}. Server time ${agent.now.local_full}.`;
 }
 
-function renderStats(c) {
+function renderStats(data) {
+  const p = data.production;
+  const late = p.runs.filter((r) => r.status === "missed").length;
+  const risky = p.runs.filter((r) => r.status === "at_risk").length;
+  const minutes = Object.values(p.stages).reduce((sum, s) => sum + s.minutes, 0);
   const tiles = [
-    { num: c.decisions_today, lbl: "Decisions today", cls: "" },
-    { num: c.auto_reassigned, lbl: "Reassigned automatically", cls: "accent-green" },
-    { num: c.open_coverage, lbl: "Cover requests open", cls: "accent-blue" },
-    { num: c.needs_manager, lbl: "Waiting on a manager", cls: c.needs_manager ? "accent-red" : "" },
+    { num: p.units_outstanding.toLocaleString(), lbl: "Units still to pack", cls: "" },
+    { num: `${Math.round(minutes / 60)}h`, lbl: "Work left on the bench", cls: "accent-blue" },
+    { num: risky, lbl: "Vans cutting it fine", cls: risky ? "accent-orange" : "" },
+    { num: late, lbl: "Vans that will be late", cls: late ? "accent-red" : "accent-green" },
   ];
-  $("stats").innerHTML = tiles.map((t) => `
+  $("stats").innerHTML = tiles
+    .map(
+      (t) => `
     <div class="tile ${t.cls}">
-      <div class="num mono">${t.num}</div>
+      <div class="num mono">${esc(t.num)}</div>
       <div class="lbl">${esc(t.lbl)}</div>
-    </div>`).join("");
+    </div>`
+    )
+    .join("");
+}
+
+/* ---------- the vans ---------- */
+
+const RUN_STATUS = {
+  on_time: ["green", "On time"],
+  at_risk: ["orange", "Cutting it fine"],
+  missed: ["critical", "Will be late"],
+  packed: ["green", "Packed"],
+  unplanned: ["orange", "Not planned"],
+};
+
+function renderRuns(production) {
+  if (!production.runs.length) {
+    $("runs").innerHTML = `<p class="empty">No vans booked.</p>`;
+    return;
+  }
+  $("runs").innerHTML = production.runs
+    .map((r) => {
+      const [cls, label] = RUN_STATUS[r.status] || ["", r.status];
+      const packed = r.ordered ? Math.round(((r.ordered - r.outstanding) / r.ordered) * 100) : 100;
+      const bar = r.status === "missed" ? "is-urgent" : "";
+      const late = r.late_minutes
+        ? `<span class="urgent">${r.late_minutes} min late</span>`
+        : r.ready_at
+          ? `ready ${esc(r.ready_at.local)}`
+          : "nothing scheduled";
+      return `
+      <article class="cover run-card fade-in" data-departs="${r.departs_at.utc}">
+        <div class="cover-head">
+          <div>
+            <h3>${esc(r.label)} run <span class="tag ${cls}">${esc(label)}</span></h3>
+            <p class="sub">${esc(r.stops.join(" · "))}</p>
+          </div>
+          <div class="timer" data-run-timer>
+            <span class="big">—</span>
+            until it leaves at ${esc(r.departs_at.local)}
+          </div>
+        </div>
+        <div class="bar"><i class="${bar}" style="width:${packed}%"></i></div>
+        <div class="asked">
+          <div class="asked-row">
+            <div class="asked-name">
+              ${r.outstanding.toLocaleString()} of ${r.ordered.toLocaleString()} units left
+              <small>${r.open_tasks} job(s) · ${late}</small>
+            </div>
+            <span class="row-side">${esc(r.people.join(", ") || "nobody assigned")}</span>
+          </div>
+        </div>
+      </article>`;
+    })
+    .join("");
+}
+
+function renderRemaining(production) {
+  if (!production.remaining.length) {
+    $("remaining").innerHTML = `<p class="empty">Everything on the book is packed.</p>`;
+    return;
+  }
+  $("remaining").innerHTML = production.remaining
+    .map(
+      (row) => `
+    <div class="row">
+      <div class="row-main">
+        <div class="row-title">${esc(row.product)}
+          <span class="tag ${row.kind === "frozen" ? "blue" : ""}">${esc(row.kind)}</span></div>
+        <div class="row-meta">about ${row.minutes} min of packing</div>
+      </div>
+      <div class="row-side mono">${row.units.toLocaleString()}</div>
+    </div>`
+    )
+    .join("");
 }
 
 /* ---------- escalations ---------- */
@@ -132,28 +212,37 @@ function renderCoverage(coverage) {
 
 /* ---------- job board ---------- */
 
+const STAGE_TAG = {
+  retrieve: ["blue", "Freezer"],
+  pack: ["", "Pack"],
+  sort: ["purple", "Sort"],
+  dispatch: ["critical", "Load"],
+};
+
 function renderBoard(board) {
-  if (!board.length) {
-    $("board").innerHTML = `<p class="empty">No live work scheduled.</p>`;
+  const live = board.filter((t) => t.stage);
+  if (!live.length) {
+    $("board").innerHTML = `<p class="empty">Nothing on the bench.</p>`;
     return;
   }
-  $("board").innerHTML = board.map((t) => {
-    const driver = t.pickup_at
-      ? `<span class="tag critical">driver ${esc(t.pickup_at.local)}</span>`
-      : "";
-    return `
-    <div class="row">
-      <div class="row-main">
-        <div class="row-title">${esc(t.title)} ${driver}</div>
-        <div class="row-meta">
-          ${esc(t.starts_at.local)}–${esc(t.due_at.local)}${t.station ? ` · ${esc(t.station)}` : ""}
+  $("board").innerHTML = live
+    .slice(0, 16)
+    .map((t) => {
+      const [cls, label] = STAGE_TAG[t.stage] || ["", t.stage];
+      return `
+      <div class="row">
+        <div class="row-main">
+          <div class="row-title"><span class="tag ${cls}">${esc(label)}</span> ${esc(t.title)}</div>
+          <div class="row-meta">
+            ${esc(t.starts_at.local)}–${esc(t.due_at.local)}${t.run ? ` · ${esc(t.run)} van` : ""}
+          </div>
         </div>
-      </div>
-      <div class="row-side">
-        ${t.assignee ? esc(t.assignee) : `<span class="urgent">Unassigned</span>`}
-      </div>
-    </div>`;
-  }).join("");
+        <div class="row-side">
+          ${t.assignee ? esc(t.assignee) : `<span class="urgent">Unassigned</span>`}
+        </div>
+      </div>`;
+    })
+    .join("");
 }
 
 /* ---------- decision feed ---------- */
@@ -226,7 +315,16 @@ function renderStaff(staff, limits) {
 
 function tick() {
   const now = Date.now();
-  document.querySelectorAll(".cover").forEach((card) => {
+  document.querySelectorAll("[data-departs]").forEach((card) => {
+    const timer = card.querySelector("[data-run-timer] .big");
+    if (!timer) return;
+    const { text, overdue } = countdown(new Date(card.dataset.departs), now);
+    timer.textContent = overdue ? "gone" : text;
+    timer.closest(".timer").classList.toggle("is-urgent", overdue || (new Date(card.dataset.departs) - now) < 1800000);
+  });
+  // Scoped to cover requests specifically: the van cards reuse the same
+  // surface styling, and an unscoped ".cover" swept them up and threw.
+  document.querySelectorAll(".cover[data-expires]").forEach((card) => {
     const expires = new Date(card.dataset.expires);
     const created = new Date(card.dataset.created);
     const timer = card.querySelector("[data-timer]");
@@ -248,7 +346,9 @@ async function refresh() {
     const data = await api("/api/dashboard");
     state = data;
     renderAgent(data.agent);
-    renderStats(data.counters);
+    renderStats(data);
+    renderRuns(data.production);
+    renderRemaining(data.production);
     renderEscalations(data.feed);
     renderCoverage(data.coverage);
     renderBoard(data.board);
@@ -306,21 +406,21 @@ document.addEventListener("click", (event) => {
       b.classList.toggle("on", b === seg);
       b.setAttribute("aria-checked", String(b === seg));
     });
-    $("demo-note").textContent = variant === "on_shift"
-      ? "Somebody trained is already at work, so the job just moves."
-      : "Nobody on shift can pack, so the agent has to ring round.";
+    $("demo-note").textContent =
+      variant === "full_team"
+        ? "Three packers rostered. The agent plans the evening and every van makes it."
+        : "Two packers rostered. Watch which vans start slipping.";
   }
 });
 
 $("btn-reset").addEventListener("click", () => withBusy(async () => {
   const result = await api(`/api/demo/reset?variant=${variant}`, { method: "POST" });
-  toast(`Kitchen loaded — ${result.description.toLowerCase()}.`);
+  toast(`Factory loaded: ${result.units.toLocaleString()} units, ${result.tasks} jobs planned.`);
 }));
 
 $("btn-leave").addEventListener("click", () => withBusy(async () => {
-  const result = await api("/api/demo/leave", { method: "POST" });
-  const actions = result.plan.task_plans.map((p) => p.action.replace(/_/g, " "));
-  toast(`Mai is off. Agent: ${actions.join(", ")}.`);
+  const result = await api("/api/demo/disrupt", { method: "POST" });
+  toast(result.speech);
 }));
 
 $("demo-toggle").addEventListener("click", () => {

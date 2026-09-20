@@ -55,7 +55,7 @@ def test_my_page_says_nothing_about_my_colleagues(client, asked):
     body = view(client, asked, "luis").json()
     blob = json.dumps(body)
 
-    for colleague in ("Sam Whitlock", "Tomas Iglesias", "Priya Raman", "Dev Osei"):
+    for colleague in ("Tavi", "Marlo", "Jasoo", "Ken"):
         assert colleague not in blob, f"{colleague} should not appear in Luis's own page"
 
     # The dashboard's sections, by name, must not have followed it over.
@@ -107,12 +107,12 @@ def test_i_can_see_who_picked_up_my_work(client, asked, session, settings, notif
     request = session.scalars(
         select(CoverageRequest).where(CoverageRequest.status == CoverageStatus.OPEN)
     ).one()
-    offer = next(o for o in request.offers if o.employee_id == asked.employee_id("luis"))
+    offer = next(o for o in request.offers if o.employee_id == asked.employee_id("valentino"))
     coverage_engine.accept_offer(session, offer, notifier, settings, now)
 
     mai = view(client, asked, "mai").json()
     taken = {(h["task_title"], h["taken_by"]) for h in mai["handovers"]}
-    assert ("Pack order 1043", "Luis Ferrer") in taken
+    assert ("Pack order 1043", "Valentino") in taken
     assert any(h["how"] == "volunteered" for h in mai["handovers"])
     assert any(h["how"] == "reassigned" for h in mai["handovers"])
     assert mai["leave"][0]["status"] == "approved"
@@ -154,21 +154,21 @@ def test_outside_dry_run_a_bare_id_gets_you_nothing(client, settings, world):
 
 def test_a_tampered_identity_link_is_refused(client, settings, world):
     settings.dry_run = False
-    bad = make_identity_token(world.employee_id("luis"), "not-the-real-secret", 60)
+    bad = make_identity_token(world.employee_id("valentino"), "not-the-real-secret", 60)
     assert view(client, world, "luis", token=bad).status_code == 401
 
 
 def test_an_expired_identity_link_is_refused(client, settings, world):
     settings.dry_run = False
     stale = make_identity_token(
-        world.employee_id("luis"), settings.coverage_link_secret, 60, now=time.time() - 7200
+        world.employee_id("valentino"), settings.coverage_link_secret, 60, now=time.time() - 7200
     )
     assert view(client, world, "luis", token=stale).status_code == 401
 
 
 def test_a_valid_link_opens_only_its_own_page(client, settings, world):
     settings.dry_run = False
-    token = make_identity_token(world.employee_id("luis"), settings.coverage_link_secret, 60)
+    token = make_identity_token(world.employee_id("valentino"), settings.coverage_link_secret, 60)
     assert view(client, world, "luis", token=token).status_code == 200
 
     # The same link pointed at somebody else's id is refused, not quietly
@@ -186,9 +186,9 @@ def test_an_accept_link_is_not_a_pass_to_somebody_schedule(client, settings, wor
 
 
 def test_whoami_gives_back_an_id_and_nothing_else(client, settings, world):
-    token = make_identity_token(world.employee_id("sam"), settings.coverage_link_secret, 60)
+    token = make_identity_token(world.employee_id("tavi"), settings.coverage_link_secret, 60)
     body = client.get("/api/me/whoami", params={"token": token}).json()
-    assert body == {"employee_id": world.employee_id("sam")}
+    assert body == {"employee_id": world.employee_id("tavi")}
 
 
 def test_whoami_refuses_a_coverage_token(client, settings):
@@ -212,7 +212,7 @@ def test_replying_from_my_own_page_moves_the_job(client, asked, session):
     ).one()
     result = client.post(
         f"/coverage/{request.id}/reply",
-        json={"employee_id": asked.employee_id("luis"), "accept": True},
+        json={"employee_id": asked.employee_id("valentino"), "accept": True},
     ).json()
     assert result["ok"]
 
@@ -230,7 +230,7 @@ def test_an_offer_i_already_answered_still_shows_what_happened(
     luis_offer = session.scalars(
         select(CoverageOffer).where(
             CoverageOffer.coverage_request_id == request.id,
-            CoverageOffer.employee_id == asked.employee_id("luis"),
+            CoverageOffer.employee_id == asked.employee_id("valentino"),
         )
     ).one()
     coverage_engine.decline_offer(session, luis_offer, notifier, settings, now)

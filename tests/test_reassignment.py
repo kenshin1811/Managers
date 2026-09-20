@@ -20,15 +20,18 @@ from app.models.leave import LeaveRequest
 from app.models.shift import ShiftAssignment
 from app.models.task import Task
 from app.sim.seed import at
+from tests.conftest import a_board
 
 
-def file_leave(session, world, now, *, starts=None, ends=None) -> LeaveRequest:
+def file_leave(session, world, now, *, starts=None, ends=None, board=True) -> LeaveRequest:
+    if board:
+        a_board(session, world)
     leave = LeaveRequest(
-        employee_id=world.employee_id("mai"),
+        employee_id=world.employee_id("shaleen"),
         leave_type=LeaveType.EMERGENCY,
         reason="Family emergency",
-        starts_at=starts or at(14, 30),
-        ends_at=ends or at(18, 0),
+        starts_at=starts or at(16, 45),
+        ends_at=ends or at(21, 0),
         status=LeaveStatus.PENDING_COVERAGE,
         created_at=now,
     )
@@ -48,18 +51,28 @@ def strip_skill(session, world, code: str, keep: set[str]) -> None:
     session.flush()
 
 
+def nobody_on_shift_can_pack(session, world) -> None:
+    """Take the frozen-packing sign-off off everyone rostered but Shaleen.
+
+    Headcount is not what makes an evening hard here -- the skills are. With
+    Ken and Jasoo not signed off, Shaleen leaving is a hole nobody in the
+    building can fill, which is the only way the call-in machinery gets used.
+    """
+    strip_skill(session, world, "pack_frozen", keep={"shaleen", "valentino", "tavi", "marlo"})
+
+
 # --- planning is pure -------------------------------------------------------
 
 
 def test_planning_changes_nothing_and_sends_nothing(session, settings, world, notifier, now):
     leave = file_leave(session, world, now)
-    before = world.tasks["pack_1043"].assignee_id
+    before = world.tasks["pack_north"].assignee_id
 
     plan = reassignment.plan_for_leave(session, leave, settings, now)
 
     assert plan.task_plans, "the leave should collide with something"
-    session.refresh(world.tasks["pack_1043"])
-    assert world.tasks["pack_1043"].assignee_id == before
+    session.refresh(world.tasks["pack_north"])
+    assert world.tasks["pack_north"].assignee_id == before
     assert notifier.sent == []
     assert session.scalars(select(DecisionRecord)).all() == []
 
@@ -69,13 +82,13 @@ def test_the_driver_collision_is_flagged_critical_and_sorted_first(session, sett
     plan = reassignment.plan_for_leave(session, leave, settings, now)
 
     first = plan.task_plans[0]
-    assert first.impact.title == "Pack order 1043"
+    assert first.impact.title == "Pack and label 90 jam donut"
     assert first.impact.critical
-    assert first.impact.pickup_at == at(14, 50)
+    assert first.impact.pickup_at == at(18, 0)
 
     # Work with no order attached has a deadline, but missing it costs nothing
     # outside the building, so it is not critical.
-    restock = next(p for p in plan.task_plans if p.impact.title == "Restock the cold line")
+    restock = next(p for p in plan.task_plans if p.impact.title == "Restock the pack line")
     assert not restock.impact.critical
 
 
@@ -87,8 +100,8 @@ def test_on_shift_colleague_is_assigned_automatically(session, settings, world, 
     plan, records = reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
 
-    pack = session.get(Task, world.tasks["pack_1043"].id)
-    assert pack.assignee_id == world.employee_id("dev")
+    pack = session.get(Task, world.tasks["pack_north"].id)
+    assert pack.assignee_id == world.employee_id("ken")
     assert plan.fully_resolved
     assert leave.status == LeaveStatus.APPROVED
     assert leave.decided_by == "system"
@@ -100,44 +113,48 @@ def test_on_shift_colleague_is_assigned_automatically(session, settings, world, 
     assert any(r.action == DecisionAction.AUTO_REASSIGNED for r in records)
 
 
-def test_no_cover_on_shift_opens_a_cover_request(session, settings, short_staffed, notifier, now):
-    leave = file_leave(session, short_staffed, now)
+def test_no_cover_on_shift_opens_a_cover_request(session, settings, world, notifier, now):
+    nobody_on_shift_can_pack(session, world)
+    leave = file_leave(session, world, now)
     reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
 
-    request = session.scalars(select(CoverageRequest).order_by(CoverageRequest.id.desc())).first()
+    # All three of her jobs need somebody; this is the one with a van behind it.
+    request = session.scalars(
+        select(CoverageRequest).where(CoverageRequest.task_id == world.tasks["pack_north"].id)
+    ).one()
     assert request.status == CoverageStatus.OPEN
-    assert request.task_id == short_staffed.tasks["pack_1043"].id
     asked = {offer.employee_id for offer in request.offers}
     assert asked == {
-        short_staffed.employee_id("luis"),
-        short_staffed.employee_id("sam"),
+        world.employee_id("valentino"),
+        world.employee_id("tavi"),
     }
 
     # The task stays with the person leaving until somebody actually says yes.
-    assert session.get(Task, short_staffed.tasks["pack_1043"].id).assignee_id == (
-        short_staffed.employee_id("mai")
+    assert session.get(Task, world.tasks["pack_north"].id).assignee_id == (
+        world.employee_id("shaleen")
     )
     assert leave.status == LeaveStatus.PENDING_COVERAGE
 
 
-def test_cover_request_expires_before_the_driver_arrives(
-    session, settings, short_staffed, notifier, now
-):
-    leave = file_leave(session, short_staffed, now)
+def test_cover_request_expires_before_the_driver_arrives(session, settings, world, notifier, now):
+    nobody_on_shift_can_pack(session, world)
+    leave = file_leave(session, world, now)
     reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
 
-    request = session.scalars(select(CoverageRequest).order_by(CoverageRequest.id.desc())).first()
-    pickup = short_staffed.orders["1043"].pickup_at
+    request = session.scalars(
+        select(CoverageRequest).where(CoverageRequest.task_id == world.tasks["pack_north"].id)
+    ).one()
+    pickup = world.orders["fitzroy"].pickup_at
     assert request.expires_at < pickup, "a manager needs time to act before the driver lands"
 
 
 def test_nobody_eligible_escalates_instead_of_bending_a_rule(
-    session, settings, short_staffed, notifier, now
+    session, settings, world, notifier, now
 ):
-    strip_skill(session, short_staffed, "pack", keep={"mai"})
-    leave = file_leave(session, short_staffed, now)
+    strip_skill(session, world, "pack_frozen", keep={"shaleen"})
+    leave = file_leave(session, world, now)
     plan, records = reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
 
@@ -163,7 +180,8 @@ def test_autonomy_can_be_switched_off_entirely(session, settings, world, notifie
     session.commit()
 
     assert all(p.action == DecisionAction.BLOCKED_BY_POLICY for p in plan.task_plans)
-    assert session.get(Task, world.tasks["pack_1043"].id).assignee_id == world.employee_id("mai")
+    pack = session.get(Task, world.tasks["pack_north"].id)
+    assert pack.assignee_id == world.employee_id("shaleen")
     assert [m.kind for m in notifier.sent].count("escalation") == len(plan.task_plans)
 
 
@@ -176,7 +194,7 @@ def test_the_shift_is_released_so_the_hours_stop_counting(session, settings, wor
     session.commit()
 
     assignment = session.scalars(
-        select(ShiftAssignment).where(ShiftAssignment.employee_id == world.employee_id("mai"))
+        select(ShiftAssignment).where(ShiftAssignment.employee_id == world.employee_id("shaleen"))
     ).first()
     assert assignment.status == ShiftAssignmentStatus.RELEASED
 
@@ -184,15 +202,15 @@ def test_the_shift_is_released_so_the_hours_stop_counting(session, settings, wor
 def test_one_plan_does_not_hand_the_same_person_overlapping_jobs(
     session, settings, world, notifier, now
 ):
-    """Priya is the obvious pick for both prep jobs -- but they do not overlap."""
+    """Ken is the obvious pick for both jobs -- and they do not overlap."""
     leave = file_leave(session, world, now)
     reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
 
-    prep = session.get(Task, world.tasks["prep_1051"].id)
+    pack_east = session.get(Task, world.tasks["pack_east"].id)
     restock = session.get(Task, world.tasks["restock"].id)
-    assert prep.assignee_id is not None and restock.assignee_id is not None
-    assert prep.due_at <= restock.starts_at, (
+    assert pack_east.assignee_id is not None and restock.assignee_id is not None
+    assert pack_east.due_at <= restock.starts_at, (
         "these jobs must not overlap for this test to mean anything"
     )
 
@@ -208,11 +226,11 @@ def test_every_decision_records_the_candidates_and_the_rules(
         r
         for r in recent_decisions(session)
         if r.action == DecisionAction.AUTO_REASSIGNED
-        and r.subject_id == world.tasks["pack_1043"].id
+        and r.subject_id == world.tasks["pack_north"].id
     )
     plan = record.details["plan"]
-    assert plan["chosen"]["employee_name"] == "Dev Osei"
-    assert record.details["from_employee_id"] == world.employee_id("mai")
+    assert plan["chosen"]["employee_name"] == "Ken"
+    assert record.details["from_employee_id"] == world.employee_id("shaleen")
 
     considered = plan["candidates"]
     assert len(considered) > 1
@@ -221,17 +239,16 @@ def test_every_decision_records_the_candidates_and_the_rules(
     assert all(c["rules"] for c in considered), "every candidate carries its rule evaluations"
 
 
-def test_a_second_leave_does_not_start_a_duplicate_hunt(
-    session, settings, short_staffed, notifier, now
-):
-    leave = file_leave(session, short_staffed, now)
+def test_a_second_leave_does_not_start_a_duplicate_hunt(session, settings, world, notifier, now):
+    nobody_on_shift_can_pack(session, world)
+    leave = file_leave(session, world, now)
     reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
     open_query = select(CoverageRequest).where(CoverageRequest.status == CoverageStatus.OPEN)
     first_count = len(session.scalars(open_query).all())
 
     again = reassignment.plan_for_leave(session, leave, settings, now)
-    pack_plan = next(p for p in again.task_plans if p.impact.title == "Pack order 1043")
+    pack_plan = next(p for p in again.task_plans if p.impact.title == "Pack and label 90 jam donut")
     assert pack_plan.action == DecisionAction.NO_ACTION_NEEDED
     assert "already open" in pack_plan.reason
     assert len(session.scalars(open_query).all()) == first_count

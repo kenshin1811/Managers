@@ -18,7 +18,7 @@ from app.models.coverage import CoverageRequest
 from app.models.enums import CoverageStatus
 from app.scheduler import SWEEP_SECONDS, build_scheduler, run_sweep
 from app.sim.seed import at
-from tests.test_reassignment import file_leave
+from tests.test_coverage import only_the_packing_job
 
 
 def test_the_sweep_job_is_registered_and_does_not_pile_up():
@@ -38,13 +38,13 @@ def test_the_sweep_job_is_registered_and_does_not_pile_up():
 
 
 def test_run_sweep_escalates_an_unanswered_request(
-    db_engine, session, settings, short_staffed, notifier, now
+    db_engine, session, settings, world, notifier, now
 ):
-    leave = file_leave(session, short_staffed, now)
+    leave = only_the_packing_job(session, world, now)
     reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
 
-    pickup = short_staffed.orders["1043"].pickup_at
+    pickup = world.orders["fitzroy"].pickup_at
     runtime.set_clock(FrozenClock(pickup - timedelta(minutes=5)))
     runtime.set_notifier(notifier)
     factory = sessionmaker(bind=db_engine, expire_on_commit=False, future=True)

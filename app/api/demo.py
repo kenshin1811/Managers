@@ -11,7 +11,7 @@ run is the sandbox; anything else is somebody's real roster.
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -21,17 +21,17 @@ from sqlalchemy.orm import Session
 from app.api.deps import notifier_dep, now_dep, settings_dep
 from app.config import Settings
 from app.db import Base, get_session
-from app.engine import reassignment
-from app.models.enums import LeaveStatus, LeaveType
+from app.engine import commands, planning
+from app.models.enums import LeaveStatus
 from app.models.leave import LeaveRequest
 from app.models.state import SystemState
-from app.sim.seed import seed_kitchen
+from app.sim.seed import seed_factory
 
 router = APIRouter(tags=["demo"], prefix="/api/demo")
 
 VARIANTS = {
-    "on_shift": "A trained colleague is already at work",
-    "call_in": "Nobody on shift can pack, so cover has to be called in",
+    "full_team": "Three packers rostered: the evening fits",
+    "short_team": "Two packers rostered: the vans start slipping",
 }
 
 
@@ -68,63 +68,56 @@ def reset(
             session.execute(table.delete())
     session.flush()
 
-    world = seed_kitchen(
+    world = seed_factory(
         session,
-        on_shift_packer=(variant == "on_shift"),
+        full_team=(variant == "full_team"),
         anchor=now,
         tz=settings.business_tz,
     )
+    # Seeding lays out the orders; the agent works out the evening. Shipping a
+    # pre-planned board would hide the part worth watching.
+    plan, tasks = planning.plan_and_commit(session, settings, now, trigger="demo_reset")
     session.commit()
     return {
         "variant": variant,
         "description": VARIANTS[variant],
         "employees": len(world.employees),
-        "tasks": len(world.tasks),
-        "pickup_at": world.orders["1043"].pickup_at.isoformat() + "Z",
-        "leave_starts_at": (now + timedelta(minutes=25)).isoformat() + "Z",
+        "orders": len(world.orders),
+        "units": sum(order.units for order in world.orders.values()),
+        "tasks": len(tasks),
+        "feasible": plan.feasible,
+        "next_van": min(o.pickup_at for o in world.orders.values()).isoformat() + "Z",
     }
 
 
-@router.post("/leave")
-def trigger_leave(
+@router.post("/disrupt")
+def disrupt(
     session: Session = Depends(get_session),
     settings: Settings = Depends(settings_dep),
     notifier=Depends(notifier_dep),
     now: datetime = Depends(now_dep),
 ) -> dict[str, Any]:
-    """Mai has a family emergency. Let the engine deal with it."""
+    """Shaleen goes home sick, through the same path the microphone uses.
+
+    Deliberately routed through the command parser rather than straight at the
+    engine: the demo button and the floor manager's voice should not be able
+    to take different routes, or the button stops being evidence.
+    """
     _guard(settings)
     from app.models.employee import Employee
 
-    mai = session.scalar(select(Employee).where(Employee.full_name == "Mai Tran"))
-    if mai is None:
-        raise HTTPException(409, "Load the demo kitchen first.")
+    shaleen = session.scalar(select(Employee).where(Employee.full_name == "Shaleen"))
+    if shaleen is None:
+        raise HTTPException(409, "Load the factory first.")
     existing = session.scalar(
         select(LeaveRequest).where(
-            LeaveRequest.employee_id == mai.id,
+            LeaveRequest.employee_id == shaleen.id,
             LeaveRequest.status.in_([LeaveStatus.PENDING_COVERAGE, LeaveStatus.APPROVED]),
         )
     )
     if existing is not None:
-        raise HTTPException(409, "Mai has already gone. Reset the demo to run it again.")
+        raise HTTPException(409, "Shaleen has already gone. Reset to run it again.")
 
-    leave = LeaveRequest(
-        employee_id=mai.id,
-        leave_type=LeaveType.EMERGENCY,
-        reason="Family emergency - has to leave now",
-        starts_at=now + timedelta(minutes=25),
-        ends_at=now + timedelta(hours=4),
-        status=LeaveStatus.PENDING_COVERAGE,
-        created_at=now,
-    )
-    session.add(leave)
-    session.flush()
-
-    plan, records = reassignment.handle_leave_request(session, leave, notifier, settings, now)
+    result = commands.handle(session, settings, now, "Shaleen is off sick", notifier)
     session.commit()
-    return {
-        "leave_id": leave.id,
-        "leave_status": leave.status,
-        "decisions": [record.id for record in records],
-        "plan": plan.as_dict(),
-    }
+    return {"ok": result.ok, "speech": result.speech, "detail": result.detail}
