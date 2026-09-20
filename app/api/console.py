@@ -19,8 +19,6 @@ from app.api.deps import notifier_dep, now_dep, settings_dep
 from app.config import Settings
 from app.db import get_session
 from app.engine import commands
-from app.engine.journal import record_decision
-from app.models.enums import DecisionAction
 
 router = APIRouter(tags=["console"], prefix="/api/console")
 
@@ -76,27 +74,12 @@ def command(
 ) -> Spoke:
     """Run one instruction and say what happened.
 
-    Every instruction is written to the same audit log as the agent's own
-    decisions, with the manager as the actor and the words they used. When
-    somebody asks later why three hundred jam donuts appeared on the six
-    o'clock run, the answer is a row, not a memory.
+    ``commands.handle`` writes every instruction to the same audit log as the
+    agent's own decisions, with the manager as the actor and the words they
+    used -- so this endpoint has nothing to remember to do.
     """
-    result = commands.handle(session, settings, now, payload.transcript, notifier)
-
-    record_decision(
-        session,
-        now=now,
-        action=DecisionAction.OVERRIDDEN if result.ok else DecisionAction.NO_ACTION_NEEDED,
-        trigger=f"console_{payload.source}",
-        summary=f'Floor manager said "{payload.transcript.strip()}" — {result.speech}',
-        subject_type="console",
-        actor="manager:console",
-        details={
-            "transcript": payload.transcript,
-            "source": payload.source,
-            "understood_as": result.kind,
-            "ok": result.ok,
-        },
+    result = commands.handle(
+        session, settings, now, payload.transcript, notifier, source=payload.source
     )
     session.commit()
 

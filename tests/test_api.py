@@ -20,6 +20,8 @@ from app.models.coverage import CoverageRequest
 from app.models.enums import CoverageStatus
 from app.sim.seed import at
 from app.tokens import make_token, parse_identity_token
+from tests.conftest import a_pack_job
+from tests.test_reassignment import nobody_on_shift_can_pack
 
 
 @pytest.fixture
@@ -32,6 +34,20 @@ def client(session, settings, notifier, clock):
     app.dependency_overrides[notifier_dep] = lambda: notifier
     app.dependency_overrides[now_dep] = lambda: clock.now()
     return TestClient(app)
+
+
+@pytest.fixture
+def call_in(session, world):
+    """One packing job on the board, and nobody rostered who can cover it.
+
+    The HTTP tests below need exactly one open cover request to follow, so
+    the board is kept to a single job -- and the hole is in the sign-offs,
+    not the headcount, because that is what actually bites in this factory.
+    """
+    nobody_on_shift_can_pack(session, world)
+    a_pack_job(session, world)
+    session.commit()
+    return world
 
 
 def iso(moment) -> str:
@@ -50,64 +66,69 @@ def test_health_reports_the_autonomy_settings(client):
 
 def test_full_round_trip_from_empty_database(client, session, notifier):
     """Skills, staff, a shift, an order, a job, hours, leave, cover, audit."""
-    assert client.post("/skills", json={"code": "pack", "name": "Packing"}).status_code == 201
+    skill = {"code": "pack_frozen", "name": "Frozen packing"}
+    assert client.post("/skills", json=skill).status_code == 201
 
-    mai = client.post("/employees", json={"full_name": "Shaleen", "slack_user_id": "U_MAI"}).json()
-    dev = client.post("/employees", json={"full_name": "Ken", "slack_user_id": "U_DEV"}).json()
-    for person in (mai, dev):
+    shaleen = client.post(
+        "/employees", json={"full_name": "Shaleen", "slack_user_id": "U_SHALEEN"}
+    ).json()
+    ken = client.post("/employees", json={"full_name": "Ken", "slack_user_id": "U_KEN"}).json()
+    for person in (shaleen, ken):
         response = client.post(
-            f"/employees/{person['id']}/skills", json={"skill_code": "pack", "proficiency": 4}
+            f"/employees/{person['id']}/skills",
+            json={"skill_code": "pack_frozen", "proficiency": 4},
         )
         assert response.status_code == 200
 
     shift = client.post(
         "/shifts",
         json={
-            "name": "Lunch",
-            "starts_at": iso(at(10, 0)),
-            "ends_at": iso(at(18, 0)),
-            "employee_ids": [mai["id"], dev["id"]],
+            "name": "Packing, afternoon",
+            "starts_at": iso(at(13, 0)),
+            "ends_at": iso(at(21, 0)),
+            "employee_ids": [shaleen["id"], ken["id"]],
         },
     ).json()
 
     order = client.post(
         "/orders",
-        json={"code": "1043", "customer_name": "Okafor", "pickup_at": iso(at(14, 50))},
+        json={"code": "D1042", "customer_name": "Fitzroy shopfront", "pickup_at": iso(at(18, 0))},
     ).json()
 
     task = client.post(
         "/tasks",
         json={
-            "title": "Pack order 1043",
+            "title": "Pack and label 90 jam donut",
             "order_id": order["id"],
-            "assignee_id": mai["id"],
-            "required_skill_code": "pack",
+            "assignee_id": shaleen["id"],
+            "required_skill_code": "pack_frozen",
             "min_proficiency": 3,
-            "starts_at": iso(at(14, 15)),
-            "due_at": iso(at(14, 45)),
-            "estimated_minutes": 20,
+            "starts_at": iso(at(16, 40)),
+            "due_at": iso(at(17, 45)),
+            "estimated_minutes": 25,
             "priority": "high",
         },
     ).json()
 
-    for person in (mai, dev):
+    for person in (shaleen, ken):
         response = client.post(
             "/timeclock/clock-in",
-            json={"employee_id": person["id"], "shift_id": shift["id"], "at": iso(at(10, 0))},
+            json={"employee_id": person["id"], "shift_id": shift["id"], "at": iso(at(13, 0))},
         )
         assert response.status_code == 201
 
-    summary = client.get(f"/timeclock/summary/{mai['id']}").json()
+    summary = client.get(f"/timeclock/summary/{shaleen['id']}").json()
     assert summary["on_the_clock"] is True
-    assert summary["hours_today"] == pytest.approx(4.08, abs=0.05)
+    # Clocked on at 13:00, and "now" is 16:30.
+    assert summary["hours_today"] == pytest.approx(3.5, abs=0.05)
 
     # The moment everything hangs off.
     response = client.post(
         "/leave-requests",
         json={
-            "employee_id": mai["id"],
-            "starts_at": iso(at(14, 30)),
-            "ends_at": iso(at(18, 0)),
+            "employee_id": shaleen["id"],
+            "starts_at": iso(at(16, 45)),
+            "ends_at": iso(at(21, 0)),
             "leave_type": "emergency",
             "reason": "Family emergency",
         },
@@ -123,7 +144,7 @@ def test_full_round_trip_from_empty_database(client, session, notifier):
     assert task_plan["chosen"]["employee_name"] == "Ken"
     assert task_plan["task"]["critical"] is True
 
-    assert client.get(f"/tasks/{task['id']}").json()["assignee_id"] == dev["id"]
+    assert client.get(f"/tasks/{task['id']}").json()["assignee_id"] == ken["id"]
 
     decisions = client.get("/decisions").json()
     actions = {d["action"] for d in decisions}
@@ -133,13 +154,13 @@ def test_full_round_trip_from_empty_database(client, session, notifier):
     auto = next(d for d in decisions if d["action"] == "auto_reassigned")
     override = client.post(
         f"/decisions/{auto['id']}/override",
-        json={"manager_id": mai["id"], "employee_id": mai["id"], "note": "Mai is staying"},
+        json={"manager_id": shaleen["id"], "employee_id": shaleen["id"], "note": "Shaleen stays"},
     )
     assert override.status_code == 200
-    assert client.get(f"/tasks/{task['id']}").json()["assignee_id"] == mai["id"]
+    assert client.get(f"/tasks/{task['id']}").json()["assignee_id"] == shaleen["id"]
     assert client.get(f"/decisions/{auto['id']}").json()["reverted_by_id"] == override.json()["id"]
 
-    second = client.post(f"/decisions/{auto['id']}/override", json={"manager_id": mai["id"]})
+    second = client.post(f"/decisions/{auto['id']}/override", json={"manager_id": shaleen["id"]})
     assert second.status_code == 409, "a decision cannot be overridden twice"
 
 
@@ -147,14 +168,14 @@ def test_full_round_trip_from_empty_database(client, session, notifier):
 
 
 def test_signed_link_accepts_cover_without_any_slack_setup(
-    client, session, settings, short_staffed, notifier
+    client, session, settings, call_in, notifier
 ):
     response = client.post(
         "/leave-requests",
         json={
-            "employee_id": short_staffed.employee_id("shaleen"),
-            "starts_at": iso(at(14, 30)),
-            "ends_at": iso(at(18, 0)),
+            "employee_id": call_in.employee_id("shaleen"),
+            "starts_at": iso(at(16, 45)),
+            "ends_at": iso(at(21, 0)),
             "leave_type": "emergency",
         },
     )
@@ -163,9 +184,7 @@ def test_signed_link_accepts_cover_without_any_slack_setup(
     request = session.scalars(
         select(CoverageRequest).where(CoverageRequest.status == CoverageStatus.OPEN)
     ).one()
-    offer = next(
-        o for o in request.offers if o.employee_id == short_staffed.employee_id("valentino")
-    )
+    offer = next(o for o in request.offers if o.employee_id == call_in.employee_id("valentino"))
 
     token = make_token(offer.id, "accept", settings.coverage_link_secret, 60)
     hop = client.get("/coverage/respond", params={"token": token}, follow_redirects=False)
@@ -180,12 +199,12 @@ def test_signed_link_accepts_cover_without_any_slack_setup(
 
     identity = parse_qs(urlparse(destination).query)["token"][0]
     assert parse_identity_token(identity, settings.coverage_link_secret).employee_id == (
-        short_staffed.employee_id("valentino")
+        call_in.employee_id("valentino")
     )
 
     assert client.get(f"/coverage/{request.id}").json()["status"] == "filled"
     assert client.get(f"/tasks/{request.task_id}").json()["assignee_id"] == (
-        short_staffed.employee_id("valentino")
+        call_in.employee_id("valentino")
     )
 
 
@@ -202,13 +221,13 @@ def test_an_expired_link_is_refused(client, settings):
     assert page.status_code == 400
 
 
-def test_replying_for_someone_who_was_never_asked_is_a_404(client, session, short_staffed):
+def test_replying_for_someone_who_was_never_asked_is_a_404(client, session, call_in):
     client.post(
         "/leave-requests",
         json={
-            "employee_id": short_staffed.employee_id("shaleen"),
-            "starts_at": iso(at(14, 30)),
-            "ends_at": iso(at(18, 0)),
+            "employee_id": call_in.employee_id("shaleen"),
+            "starts_at": iso(at(16, 45)),
+            "ends_at": iso(at(21, 0)),
         },
     )
     request = session.scalars(
@@ -216,21 +235,21 @@ def test_replying_for_someone_who_was_never_asked_is_a_404(client, session, shor
     ).one()
     response = client.post(
         f"/coverage/{request.id}/reply",
-        json={"employee_id": short_staffed.employee_id("jasoo"), "accept": True},
+        json={"employee_id": call_in.employee_id("jasoo"), "accept": True},
     )
     assert response.status_code == 404
 
 
-def test_the_sweep_can_be_run_on_demand(client, session, short_staffed, clock):
+def test_the_sweep_can_be_run_on_demand(client, session, call_in, clock):
     client.post(
         "/leave-requests",
         json={
-            "employee_id": short_staffed.employee_id("shaleen"),
-            "starts_at": iso(at(14, 30)),
-            "ends_at": iso(at(18, 0)),
+            "employee_id": call_in.employee_id("shaleen"),
+            "starts_at": iso(at(16, 45)),
+            "ends_at": iso(at(21, 0)),
         },
     )
-    clock.set(short_staffed.orders["1043"].pickup_at - timedelta(minutes=5))
+    clock.set(call_in.orders["fitzroy"].pickup_at - timedelta(minutes=5))
     body = client.post("/coverage/sweep").json()
     assert body["decisions"], "an unanswered request this close to pickup must escalate"
 
@@ -287,25 +306,23 @@ def test_slack_callback_refuses_an_unsigned_request(client, settings):
     assert response.status_code == 401
 
 
-def test_slack_callback_accepts_a_properly_signed_request(client, session, settings, short_staffed):
+def test_slack_callback_accepts_a_properly_signed_request(client, session, settings, call_in):
     settings.slack_signing_secret = "shhh"
     client.post(
         "/leave-requests",
         json={
-            "employee_id": short_staffed.employee_id("shaleen"),
-            "starts_at": iso(at(14, 30)),
-            "ends_at": iso(at(18, 0)),
+            "employee_id": call_in.employee_id("shaleen"),
+            "starts_at": iso(at(16, 45)),
+            "ends_at": iso(at(21, 0)),
         },
     )
     request = session.scalars(
         select(CoverageRequest).where(CoverageRequest.status == CoverageStatus.OPEN)
     ).one()
-    offer = next(
-        o for o in request.offers if o.employee_id == short_staffed.employee_id("valentino")
-    )
+    offer = next(o for o in request.offers if o.employee_id == call_in.employee_id("valentino"))
 
     payload = {
-        "user": {"id": "U_LUIS"},
+        "user": {"id": "U_VALENTINO"},
         "actions": [{"action_id": f"coverage_accept_{offer.id}", "value": str(offer.id)}],
     }
     body = urlencode({"payload": json.dumps(payload)}).encode()
@@ -331,28 +348,26 @@ def test_slack_callback_accepts_a_properly_signed_request(client, session, setti
     assert response.status_code == 200
     assert "covering" in response.json()["text"]
     assert client.get(f"/coverage/{request.id}").json()["filled_by_id"] == (
-        short_staffed.employee_id("valentino")
+        call_in.employee_id("valentino")
     )
 
 
 def test_slack_callback_will_not_let_one_person_accept_for_another(
-    client, session, settings, short_staffed
+    client, session, settings, call_in
 ):
     settings.slack_signing_secret = "shhh"
     client.post(
         "/leave-requests",
         json={
-            "employee_id": short_staffed.employee_id("shaleen"),
-            "starts_at": iso(at(14, 30)),
-            "ends_at": iso(at(18, 0)),
+            "employee_id": call_in.employee_id("shaleen"),
+            "starts_at": iso(at(16, 45)),
+            "ends_at": iso(at(21, 0)),
         },
     )
     request = session.scalars(
         select(CoverageRequest).where(CoverageRequest.status == CoverageStatus.OPEN)
     ).one()
-    offer = next(
-        o for o in request.offers if o.employee_id == short_staffed.employee_id("valentino")
-    )
+    offer = next(o for o in request.offers if o.employee_id == call_in.employee_id("valentino"))
 
     payload = {
         "user": {"id": "U_SOMEONE_ELSE"},

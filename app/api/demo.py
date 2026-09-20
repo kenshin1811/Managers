@@ -1,9 +1,9 @@
 """A demo switch, so the dashboard can be watched doing something.
 
 An empty dashboard cannot answer "is this working?".  These endpoints load the
-seeded kitchen anchored to the current moment -- so the driver really is
-arriving in 45 minutes -- and then fire the leave request that sets the engine
-off.
+seeded factory anchored to the current moment -- so the next van really is
+ninety minutes out -- plan the evening, and then fire the disruption that sets
+the engine off.
 
 They wipe the database, so they refuse to run unless ``DRY_RUN`` is on. Dry
 run is the sandbox; anything else is somebody's real roster.
@@ -51,17 +51,17 @@ def variants(settings: Settings = Depends(settings_dep)) -> dict[str, Any]:
 
 @router.post("/reset")
 def reset(
-    variant: str = "on_shift",
+    variant: str = "full_team",
     session: Session = Depends(get_session),
     settings: Settings = Depends(settings_dep),
     now: datetime = Depends(now_dep),
 ) -> dict[str, Any]:
-    """Wipe everything and lay out the seeded kitchen as of right now."""
+    """Wipe everything and lay out the seeded factory as of right now."""
     _guard(settings)
     if variant not in VARIANTS:
         raise HTTPException(400, f"Unknown variant. Try one of: {', '.join(VARIANTS)}")
 
-    # The heartbeat is a fact about the service, not about the kitchen, so it
+    # The heartbeat is a fact about the service, not about the factory, so it
     # survives -- otherwise resetting the demo would make the agent look dead.
     for table in reversed(Base.metadata.sorted_tables):
         if table.name != SystemState.__tablename__:
@@ -118,6 +118,8 @@ def disrupt(
     if existing is not None:
         raise HTTPException(409, "Shaleen has already gone. Reset to run it again.")
 
-    result = commands.handle(session, settings, now, "Shaleen is off sick", notifier)
+    result = commands.handle(
+        session, settings, now, "Shaleen is off sick", notifier, source="demo_button"
+    )
     session.commit()
     return {"ok": result.ok, "speech": result.speech, "detail": result.detail}

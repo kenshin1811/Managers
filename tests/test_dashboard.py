@@ -15,13 +15,13 @@ from sqlalchemy import select
 from app.api.deps import notifier_dep, now_dep, settings_dep
 from app.db import get_session
 from app.main import create_app
-from app.models.coverage import CoverageRequest
 from app.models.employee import Employee
 from app.models.enums import CoverageStatus
 from app.models.state import SWEEP_HEARTBEAT
 from app.scheduler import SWEEP_SECONDS
 from app.state import touch
-from tests.test_reassignment import file_leave
+from tests.conftest import a_pack_job
+from tests.test_reassignment import file_leave, nobody_on_shift_can_pack
 
 
 @pytest.fixture
@@ -72,9 +72,9 @@ def test_the_agent_block_reports_the_autonomy_settings(client, settings):
 # --- the rest of the payload ------------------------------------------------
 
 
-def test_every_timestamp_carries_utc_and_a_local_rendering(client, world):
+def test_every_timestamp_carries_utc_and_a_local_rendering(client, planned):
     board = client.get("/api/dashboard").json()["board"]
-    assert board, "the seeded kitchen has live work"
+    assert board, "the planned evening has live work"
     stamp = board[0]["starts_at"]
     # The browser does the arithmetic in UTC and prints the local string; a
     # naive ISO string without the Z would be read as browser-local time.
@@ -82,29 +82,93 @@ def test_every_timestamp_carries_utc_and_a_local_rendering(client, world):
     assert len(stamp["local"]) == 5
 
 
-def test_the_board_names_the_person_holding_each_job(client, world):
+def test_the_board_names_the_person_holding_each_job(client, session, world):
+    a_pack_job(session, world)
+    session.commit()
+
     board = client.get("/api/dashboard").json()["board"]
-    pack = next(t for t in board if t["title"] == "Pack order 1043")
+    pack = next(t for t in board if t["title"] == "Pack and label 90 jam donut")
     assert pack["assignee"] == "Shaleen"
-    assert pack["order_code"] == "1043"
-    assert pack["pickup_at"]["local"] == "14:50"
+    assert pack["order_code"] == "D1042"
+    assert pack["pickup_at"]["local"] == "18:00"
+    assert pack["stage"] == "pack"
+    assert pack["run"] == "north"
+
+
+# --- the production block ---------------------------------------------------
+
+
+def test_the_vans_are_listed_in_the_order_they_leave(client, planned):
+    runs = client.get("/api/dashboard").json()["production"]["runs"]
+    assert [r["run"] for r in runs] == ["internal", "north", "east", "south", "city"]
+    assert [r["departs_at"]["local"] for r in runs] == [
+        "17:30",
+        "18:00",
+        "19:15",
+        "20:00",
+        "20:45",
+    ]
+    assert all(r["status"] == "on_time" for r in runs), "three packers can do this evening"
+
+
+def test_each_van_carries_its_stops_and_who_is_working_on_it(client, planned):
+    north = next(
+        r for r in client.get("/api/dashboard").json()["production"]["runs"] if r["run"] == "north"
+    )
+    assert north["stops"] == ["Fitzroy shopfront, Fitzroy", "Brunswick shopfront, Brunswick"]
+    assert north["people"], "a van nobody is working on is the thing to notice"
+    assert north["outstanding"] < north["ordered"], "the north run is part packed already"
+
+
+def test_the_pipeline_is_reported_stage_by_stage(client, planned):
+    production = client.get("/api/dashboard").json()["production"]
+    assert list(production["stages"]) == ["retrieve", "pack", "sort", "dispatch"]
+    assert production["stages"]["pack"]["label"] == "Pack and label"
+    assert all(stage["open"] > 0 for stage in production["stages"].values())
+
+    # What is left is what the floor actually asks about.
+    assert 0 < production["units_outstanding"] < production["units_ordered"]
+    remaining = production["remaining"]
+    assert remaining[0]["units"] >= remaining[-1]["units"], "biggest job first"
+    assert sum(item["units"] for item in remaining) == production["units_outstanding"]
+
+
+def test_losing_a_packer_shows_up_as_vans_running_late(
+    client, session, settings, planned, notifier, now
+):
+    from app.engine import commands
+
+    before = client.get("/api/dashboard").json()["production"]["runs"]
+    assert all(r["status"] == "on_time" for r in before)
+
+    commands.handle(session, settings, now, "Shaleen is off sick", notifier)
+    session.commit()
+
+    after = client.get("/api/dashboard").json()["production"]["runs"]
+    assert any(r["status"] != "on_time" for r in after), (
+        "taking a third of the floor away has to move something"
+    )
+    assert any(r["late_minutes"] > 0 for r in after)
 
 
 def test_staff_carry_their_hours_against_the_limits(client, world):
     staff = client.get("/api/dashboard").json()["staff"]
-    tomas = next(p for p in staff if p["name"] == "Marlo")
-    assert tomas["hours_week"] == pytest.approx(48.0, abs=0.5)
-    assert tomas["on_shift"] is False
-    dev = next(p for p in staff if p["name"] == "Ken")
-    assert dev["on_shift"] is True
+    marlo = next(p for p in staff if p["name"] == "Marlo")
+    assert marlo["hours_week"] == pytest.approx(48.0, abs=0.5)
+    assert marlo["on_shift"] is False
+    ken = next(p for p in staff if p["name"] == "Ken")
+    assert ken["on_shift"] is True
 
 
 def test_a_cover_request_appears_with_everyone_who_was_asked(
-    client, session, settings, short_staffed, notifier, now
+    client, session, settings, world, notifier, now
 ):
-    leave = file_leave(session, short_staffed, now)
     from app.engine import reassignment
 
+    nobody_on_shift_can_pack(session, world)
+    a_pack_job(session, world)
+    session.commit()
+    leave = file_leave(session, world, now, board=False)
     reassignment.handle_leave_request(session, leave, notifier, settings, now)
     session.commit()
 
@@ -112,8 +176,9 @@ def test_a_cover_request_appears_with_everyone_who_was_asked(
     assert body["counters"]["open_coverage"] == 1
     cover = body["coverage"][0]
     assert cover["status"] == CoverageStatus.OPEN
-    assert cover["task_title"] == "Pack order 1043"
-    assert [o["employee_name"] for o in cover["offers"]] == ["Valentino", "Tavi"]
+    assert cover["task_title"] == "Pack and label 90 jam donut"
+    # Tavi is asked first: Valentino covered twice recently.
+    assert [o["employee_name"] for o in cover["offers"]] == ["Tavi", "Valentino"]
     assert all(o["status"] == "sent" for o in cover["offers"])
 
 
@@ -161,21 +226,31 @@ def test_demo_refuses_to_wipe_a_live_system(client, settings):
     assert "DRY_RUN" in response.json()["detail"]
 
 
-def test_demo_reset_builds_the_kitchen_around_right_now(client, session, clock):
-    body = client.post("/api/demo/reset", params={"variant": "call_in"}).json()
-    assert body["employees"] == 8
+def test_demo_reset_builds_the_factory_around_right_now(client, session, clock):
+    body = client.post("/api/demo/reset", params={"variant": "short_team"}).json()
+    assert body["employees"] == 7
+    assert body["orders"] == 9
+    assert body["units"] == 2250
+    assert body["tasks"] > 0, "seeding lays out the orders; the agent plans the evening"
 
     from app.models.order import Order
 
-    order = session.scalar(select(Order).where(Order.code == "1043"))
+    order = session.scalar(select(Order).where(Order.code == "D1042"))
     minutes_away = (order.pickup_at - clock.now()).total_seconds() / 60
-    assert 40 < minutes_away < 50, (
-        "the driver has to be arriving soon for the demo to mean anything"
+    assert 80 < minutes_away < 100, (
+        "the next van has to be close for the countdown to mean anything"
     )
 
 
+def test_demo_reset_plans_the_evening_rather_than_shipping_a_board(client):
+    """A pre-planned seed would hide the part worth watching."""
+    body = client.post("/api/demo/reset", params={"variant": "full_team"}).json()
+    assert body["feasible"] is True
+    assert body["tasks"] > 40, "every run needs pulling, packing, sorting and loading"
+
+
 def test_demo_reset_keeps_the_heartbeat(client, session, now):
-    """Wiping the kitchen must not make the agent look dead."""
+    """Wiping the factory must not make the agent look dead."""
     touch(session, SWEEP_HEARTBEAT, now - timedelta(seconds=5))
     session.commit()
     client.post("/api/demo/reset")
@@ -186,35 +261,39 @@ def test_demo_reset_rejects_an_unknown_variant(client):
     assert client.post("/api/demo/reset", params={"variant": "nonsense"}).status_code == 400
 
 
-def test_demo_leave_sets_the_engine_off(client, session):
-    client.post("/api/demo/reset", params={"variant": "call_in"})
-    body = client.post("/api/demo/leave").json()
+def test_demo_disrupt_sets_the_engine_off(client, session):
+    client.post("/api/demo/reset", params={"variant": "full_team"})
+    body = client.post("/api/demo/disrupt").json()
 
-    assert body["leave_status"] == "pending_coverage"
-    actions = {p["action"] for p in body["plan"]["task_plans"]}
-    assert "coverage_requested" in actions
-    assert session.scalars(
-        select(CoverageRequest).where(CoverageRequest.status == CoverageStatus.OPEN)
-    ).first()
+    assert body["ok"] is True
+    # It says what it did out loud, because the microphone path says it too.
+    assert "Shaleen" in body["speech"]
+    assert body["detail"]["understood_as"] == "staff_off"
 
 
-def test_demo_leave_on_shift_variant_reassigns_instead_of_asking(client):
-    client.post("/api/demo/reset", params={"variant": "on_shift"})
-    body = client.post("/api/demo/leave").json()
-    assert body["leave_status"] == "approved"
-    assert all(p["action"] == "auto_reassigned" for p in body["plan"]["task_plans"])
+def test_demo_disrupt_goes_through_the_same_route_as_the_microphone(client, session):
+    """The button is only evidence if it takes the path a spoken order takes."""
+    client.post("/api/demo/reset", params={"variant": "full_team"})
+    client.post("/api/demo/disrupt")
+
+    from app.models.audit import DecisionRecord
+
+    logged = session.scalars(
+        select(DecisionRecord).where(DecisionRecord.actor == "manager:console")
+    ).all()
+    assert logged, "every command reaches the audit log, however it was given"
 
 
-def test_demo_leave_needs_a_kitchen_first(client, session):
+def test_demo_disrupt_needs_a_factory_first(client, session):
     session.execute(Employee.__table__.delete())
     session.commit()
-    assert client.post("/api/demo/leave").status_code == 409
+    assert client.post("/api/demo/disrupt").status_code == 409
 
 
-def test_demo_leave_refuses_to_send_mai_home_twice(client):
+def test_demo_disrupt_refuses_to_send_shaleen_home_twice(client):
     client.post("/api/demo/reset")
-    assert client.post("/api/demo/leave").status_code == 200
-    assert client.post("/api/demo/leave").status_code == 409
+    assert client.post("/api/demo/disrupt").status_code == 200
+    assert client.post("/api/demo/disrupt").status_code == 409
 
 
 # --- the page itself --------------------------------------------------------
@@ -224,11 +303,16 @@ def test_the_dashboard_page_is_served_at_the_root(client):
     response = client.get("/")
     assert response.status_code == 200
     assert "text/html" in response.headers["content-type"]
-    assert "Managers" in response.text
+    assert "Packing floor" in response.text
 
 
 def test_the_static_assets_are_served(client):
-    for path, kind in (("/static/styles.css", "css"), ("/static/app.js", "javascript")):
+    assets = (
+        ("/static/styles.css", "css"),
+        ("/static/app.js", "javascript"),
+        ("/static/console.js", "javascript"),
+    )
+    for path, kind in assets:
         response = client.get(path)
         assert response.status_code == 200, path
         assert kind in response.headers["content-type"]

@@ -680,11 +680,42 @@ def _mark_packed(session, settings, now, command) -> CommandResult:
 
 
 def handle(
-    session: Session, settings: Settings, now: datetime, transcript: str, notifier=None
+    session: Session,
+    settings: Settings,
+    now: datetime,
+    transcript: str,
+    notifier=None,
+    *,
+    source: str = "typed",
 ) -> CommandResult:
-    """Parse and run one spoken or typed instruction."""
+    """Parse and run one spoken or typed instruction, and log that it happened.
+
+    The audit write lives here rather than in the endpoint so that no route
+    into the system can quietly skip it. When somebody asks later why three
+    hundred jam donuts appeared on the six o'clock run, the answer is a row,
+    not a memory.
+    """
+    from app.engine.journal import record_decision
+    from app.models.enums import DecisionAction
+
     command = parse(transcript, Vocabulary.load(session))
     result = execute(session, settings, now, command, notifier)
     result.detail.setdefault("transcript", transcript)
     result.detail.setdefault("understood_as", command.kind)
+
+    record_decision(
+        session,
+        now=now,
+        action=DecisionAction.OVERRIDDEN if result.ok else DecisionAction.NO_ACTION_NEEDED,
+        trigger=f"console_{source}",
+        summary=f'Floor manager said "{transcript.strip()}" — {result.speech}',
+        subject_type="console",
+        actor="manager:console",
+        details={
+            "transcript": transcript,
+            "source": source,
+            "understood_as": result.kind,
+            "ok": result.ok,
+        },
+    )
     return result
