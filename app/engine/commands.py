@@ -60,8 +60,14 @@ NUMBER_WORDS = {
     "seventy": 70,
     "eighty": 80,
     "ninety": 90,
-    "hundred": 100,
+}
+
+#: Words that multiply what came before them. A bakery counts in dozens, so
+#: "two dozen" has to be twenty-four and not fourteen.
+SCALE_WORDS = {
     "dozen": 12,
+    "hundred": 100,
+    "thousand": 1000,
 }
 
 #: Words that carry no meaning here but turn up in ordinary speech.
@@ -177,11 +183,15 @@ def parse_quantity(words: list[str]) -> tuple[int | None, int]:
             seen = True
             consumed += 1
             continue
+        if word in SCALE_WORDS:
+            # "a dozen" with nothing in front of it is one dozen.
+            total = max(1, total) * SCALE_WORDS[word]
+            seen = True
+            consumed += 1
+            continue
         if word in NUMBER_WORDS:
             value = NUMBER_WORDS[word]
-            if value == 100 and seen:
-                total = max(1, total) * 100
-            elif seen and total % 100 == 0 and value < 100:
+            if seen and total % 100 == 0 and value < 100:
                 total += value
             elif seen and total < 100 and value < 100:
                 total += value
@@ -247,7 +257,7 @@ def match_employee(tokens: list[str], vocabulary: Vocabulary) -> Employee | None
 OFF_WORDS = {"off", "sick", "home", "leaving", "leave", "out", "away", "gone"}
 BACK_WORDS = {"back", "in", "available", "return", "returning", "here"}
 REPLAN_WORDS = {"replan", "plan", "reschedule", "redo"}
-STATUS_WORDS = {"status", "risk", "late", "track", "doing", "behind", "ready"}
+STATUS_WORDS = {"status", "risk", "late", "track", "doing", "going", "behind", "ready"}
 PACKED_WORDS = {"packed", "done", "finished", "complete", "completed"}
 
 
@@ -383,7 +393,7 @@ def execute(
             ok=True,
             kind="replan",
             speech="Re-planned. " + _run_verdict(plan, settings),
-            detail=plan.as_dict(settings),
+            detail={"plan": plan.as_dict(settings)},
             replanned=True,
         )
     if command.kind == "status":
@@ -394,7 +404,7 @@ def execute(
             ok=True,
             kind="status",
             speech=_run_verdict(plan, settings),
-            detail=plan.as_dict(settings),
+            detail={"plan": plan.as_dict(settings)},
         )
 
     return CommandResult(ok=False, kind=command.kind, speech="I don't know how to do that yet.")
