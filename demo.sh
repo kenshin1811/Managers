@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 # Run the real thing, from nothing, in one command.
 #
-#   ./demo.sh            the kitchen where cover has to be called in
-#   ./demo.sh on_shift   the kitchen where somebody at work can take it
-#   PORT=9000 ./demo.sh  somewhere other than 8000
+#   ./demo.sh              three packers rostered: the evening fits
+#   ./demo.sh short_team   two packers rostered: the vans start slipping
+#   PORT=9000 ./demo.sh    somewhere other than 8000
 #
-# Starts the service, loads a demo kitchen timed to right now, sets the engine
-# off, and opens the dashboard. Nothing leaves the process: DRY_RUN is the
-# default, so the messages are logged rather than sent.
+# Starts the service, seeds the factory timed to right now, lets the agent plan
+# the evening, and opens the dashboard. Nothing leaves the process: DRY_RUN is
+# the default, so the messages are logged rather than sent.
 
 set -euo pipefail
 
-VARIANT="${1:-call_in}"
+VARIANT="${1:-full_team}"
 PORT="${PORT:-8000}"
 HOST="127.0.0.1"
 URL="http://${HOST}:${PORT}"
@@ -22,8 +22,8 @@ say() { printf '\033[1m%s\033[0m %s\n' "→" "$*"; }
 die() { printf '\033[31m%s\033[0m %s\n' "✗" "$*" >&2; exit 1; }
 
 case "$VARIANT" in
-  call_in|on_shift) ;;
-  *) die "Unknown scenario '$VARIANT'. Use call_in or on_shift." ;;
+  full_team|short_team) ;;
+  *) die "Unknown scenario '$VARIANT'. Use full_team or short_team." ;;
 esac
 
 # --- python -----------------------------------------------------------------
@@ -75,10 +75,8 @@ done
 curl -fsS "$URL/health" >/dev/null 2>&1 || { cat "$LOG"; die "The service never answered /health."; }
 
 # --- something to look at ---------------------------------------------------
-say "Loading the demo kitchen ($VARIANT), timed to right now"
+say "Seeding the factory ($VARIANT) and planning the evening"
 curl -fsS -X POST "$URL/api/demo/reset?variant=$VARIANT" >/dev/null
-say "Mai requests leave — the engine takes it from here"
-curl -fsS -X POST "$URL/api/demo/leave" >/dev/null
 
 if command -v open >/dev/null 2>&1; then open "$URL" >/dev/null 2>&1 || true
 elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$URL" >/dev/null 2>&1 || true
@@ -87,8 +85,12 @@ fi
 cat <<BANNER
 
   Dashboard   $URL
+  Employee    $URL/me
   API docs    $URL/docs
   Messages    logged below (DRY_RUN is on, nothing is sent)
+
+  Talk to it in "Tell the floor": say or type "Shaleen is off sick",
+  "add 240 jam donuts for Fitzroy", or "what's at risk".
 
   Press Ctrl+C to stop.
 

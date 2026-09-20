@@ -2,7 +2,7 @@
 
 This is the default.  Turning a system like this loose on real people before
 you have read what it intends to say to them is how you end up texting the
-whole kitchen at 3am.
+whole packing floor at 3am.
 """
 
 from __future__ import annotations

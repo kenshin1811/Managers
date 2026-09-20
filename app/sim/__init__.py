@@ -1,1 +1,1 @@
-"""A seeded kitchen and three scenarios that exercise the whole decision flow."""
+"""A seeded donut factory, the printed scenarios, and the walkthrough recorder."""

@@ -1,50 +1,63 @@
 # Managers
 
-An automated employee management system that makes staffing decisions on its
-own, inside guardrails, and writes down why.
+An agent that runs a donut factory's packing floor: it decides who does what,
+inside guardrails, and writes down why.
 
-It tracks job assignments and hours. When somebody requests leave, it works
-out which jobs that puts at risk, reassigns them, and messages other staff to
-find cover — before the delivery driver arrives. When it cannot solve
-something without breaking a staffing rule, it stops and tells a manager.
+The floor is four packers — Ken, Jasoo, Shaleen and Valentino — working an
+afternoon shift, seven days a week. Frozen stock comes out of the general
+freezer; fresh lines do not. Everything is packed, labelled, sorted per order
+and loaded onto one of five vans running to shops around Melbourne, and
+nothing leaves the building after 9pm.
 
-The scenario the whole design is built around:
+The agent reads the order book, works out what is still outstanding, and lays
+the evening out stage by stage — **pull from the freezer → pack and label →
+sort to orders → load the van** — assigning each job to somebody signed off
+for it and free when it has to happen. When a late order lands, somebody goes
+home or a van starts slipping, it re-plans. When the new plan still does not
+fit, it asks the people who are off today, and if that fails it tells a
+manager rather than quietly missing a van.
 
-> An employee requests leave at 14:30. They are packing order 1043, whose
-> driver pickup is 14:50. Somebody has to notice the collision, find someone
-> qualified and available, reassign the job, tell everyone involved, and
-> escalate if it can't be solved safely — within minutes.
+The thing that actually bites is not total hours. There are plenty of those.
+It is the individual departures: everything for the 18:00 north run has to be
+out of the freezer, packed, labelled, sorted and loaded by 18:00, and no
+amount of spare capacity at 20:00 helps with that.
+
+A floor manager watches it and talks to it — by voice or by typing — in the
+same sentences they would use across the room:
+
+> *"add 240 jam donuts for Fitzroy"* · *"Shaleen is off sick"* ·
+> *"Valentino is back"* · *"mark 120 chocolate rings packed"* ·
+> *"what's at risk"*
 
 ## Try it
 
 **Click through it, install nothing** —
 [a walkthrough of both screens](https://claude.ai/artifact/Ln7bgLhkcjNAEuzVs21kNm).
-Switch between the manager's dashboard and an employee's page to see the same
-moment from both sides: accept a cover request as Luis, then flip to the
-manager and watch the job board change. Every figure, name, fit score and
-rejection reason in it came out of the real engine —
+Type into the console and watch the vans re-plan; switch between the manager's
+screen and an employee's to see the same moment from both sides. Every van
+time, fit score and rejection reason in it came out of the real engine —
 `python -m app.sim.capture` runs the thing and records what it decided, and the
 page replays those steps. It is a recording, not a live server, so it only
-follows paths that were recorded.
+follows the paths that were recorded, and it says so when you leave them.
 
 **Run the real one** — one command, from nothing:
 
 ```bash
 git clone https://github.com/kenshin1811/Managers.git && cd Managers
-./demo.sh              # or: ./demo.sh on_shift
+./demo.sh              # or: ./demo.sh short_team
 ```
 
-That builds the virtualenv, starts the service, loads a kitchen timed to the
-current moment, sets the engine off and opens the dashboard. `Ctrl+C` stops it
-and cleans up. Nothing is sent anywhere: `DRY_RUN` is on by default, so
-messages are logged instead.
+That builds the virtualenv, starts the service, seeds the factory timed to the
+current moment, lets the agent plan the evening, and opens the dashboard.
+`Ctrl+C` stops it and cleans up. Nothing is sent anywhere: `DRY_RUN` is on by
+default, so messages are logged instead.
 
 ## Quick start
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"
 
-# The dashboard. Open http://localhost:8000 and press "Load kitchen".
+# The dashboard. Open http://localhost:8000 and press "Load the factory".
 .venv/bin/uvicorn app.main:app --reload
 
 # Or watch it decide in the terminal, with no server at all.
@@ -59,14 +72,17 @@ logged instead of delivered. Copy `.env.example` to `.env` to change anything.
 ## Two screens
 
 **The manager's dashboard** (`/`) answers one question before anything else:
-**is the agent actually working?**
+**is the agent actually working?** Then: which vans make it, what is left to
+pack, and — in *Tell the floor* — a microphone and a text box that take the
+same sentence to the same parser.
 
 **The employee's page** (`/me`) is the other half, and the one that drives the
 agent. It shows one person their own work and nothing else: cover requests
 addressed to them at the top with a countdown to escalation, their jobs with
 driver times, their hours against the limits the engine enforces, clock in and
-out, and a form to request time off. It is built for a phone held in one hand,
-because that is where it will be read.
+out, and a form to request time off. Each job shows its stage, its van, and what
+it is waiting on — nobody packs from an empty bench. It is built for a phone
+held in one hand, because that is where it will be read.
 
 What it deliberately does not show: a colleague's hours, the decision log, or
 what the engine scored the other people it asked. An employee is told *whose*
@@ -88,17 +104,32 @@ from the process serving the page, because the scheduler may not be that
 process — so "active" means the sweep really ran, not that the web server is
 up. Miss three sweeps and it says *stalled*, which is the honest word for it.
 
-Below that: today's decision counts, anything waiting on a manager, cover
-requests in flight with a live countdown to escalation, the job board, the
-decision feed with the reasons people were ruled out, and every person's hours
-against the limits the agent enforces.
+Below that: units still to pack and hours of work left on the bench, then
+**Vans tonight** — one card per run with a live countdown to its departure,
+its stops, what is still outstanding, who is working on it, and whether it is
+on time, cutting it fine or going to be late.
 
-In dry run a demo bar appears. **Load kitchen** wipes the database and lays out
-six staff, a lunch shift and three orders timed to the current moment — the
-driver really is arriving in 45 minutes. **Mai requests leave** then sets the
-engine off, and the feed fills up in front of you. Pick *Nobody on shift* first
-and you can accept or decline the cover request from the page and watch the job
-move. The demo refuses to run unless `DRY_RUN` is on: it deletes data, and dry
+Then **Tell the floor**. Press *Speak* and say it, or type it; either way the
+words go to `/api/console/command`, are parsed by
+[`app/engine/commands.py`](app/engine/commands.py), and the agent answers in
+one sentence — usually whether the vans still make it. Speech recognition runs
+in the browser (Web Speech API); where it is unsupported the microphone hides
+itself and the text box stays. The grammar is deliberately narrow and
+deterministic, with no model in the loop: a console that guesses is worse than
+one that says it did not understand, because a wrong guess moves real donuts
+to the wrong shop. Every command is written to the same audit log as the
+agent's own decisions, tagged with the words used and where they came from.
+
+Below that: escalations, cover requests in flight with a live countdown, the
+job board, what is left to pack by product, the decision feed with the reasons
+people were ruled out, and every person's hours against the limits.
+
+In dry run a demo bar appears. **Load the factory** wipes the database, seeds
+the order book timed to the current moment and lets the agent plan it — the
+next van really is ninety minutes out. **Shaleen goes home** then sets the
+engine off, and it goes through the same command parser the microphone does,
+so the button stays evidence of the real path rather than a shortcut around
+it. The demo refuses to run unless `DRY_RUN` is on: it deletes data, and dry
 run is the only configuration where that is a sandbox rather than a roster.
 
 The page is plain HTML, CSS and JavaScript with no build step — a page whose
@@ -108,19 +139,51 @@ OS.
 
 ## What the simulation shows
 
-`python -m app.sim.scenario` runs three cases against a seeded kitchen and
-prints the full decision trace for each: the impact set, every candidate with
+`python -m app.sim.scenario` runs four cases against the seeded factory and
+prints the full trace for each: what the evening needs, every candidate with
 their score, every rule evaluated with the reason it passed or failed, the
 action taken, and the messages that would have gone out.
 
-1. **Somebody on shift can take it.** Dev is qualified, at work and free, so
-   the job moves and nobody's day off is interrupted.
-2. **Nobody on shift qualifies.** Cover requests go to off-shift staff in
-   order of fit; the first to accept gets it and the rest are stood down.
-3. **Everybody declines.** The only remaining packer would go past 48 hours,
-   so the system refuses to assign him and escalates with the whole trace.
+1. **The agent plans the evening.** 53 jobs across four stages and five vans,
+   from an order book and nothing else. Every van makes it.
+2. **The floor manager says something.** Five sentences through the parser,
+   including one it refuses to guess at.
+3. **A packer goes home.** The evening is rebuilt first; only what the new
+   plan cannot absorb is escalated, once, naming who could come in.
+4. **Somebody steps out and the system rings round.** Cover requests go to the
+   people who are off today, in order of fit — then the same evening again
+   with everybody saying no, which escalates rather than pushing the last
+   available packer past 48 hours.
 
-## How a decision gets made
+## How the evening gets planned
+
+`app/engine/planning.py` is the part that manages rather than reacts. It runs
+on a demo reset, on every console command that changes the work, and whenever
+the roster changes.
+
+1. **Explode the order book** into work units, one stage at a time. Only what
+   is still outstanding, and batched the way a line actually works: two shops
+   on the north run both wanting jam donuts is *one* trip to the freezer, not
+   two. Fresh lines skip retrieval entirely.
+2. **Give each unit a deadline** worked back from its van, not from the 9pm
+   cutoff — the freezer trip for the 18:00 run has to leave time for packing,
+   sorting and loading behind it.
+3. **Sort by deadline, then by stage**, so the tightest van is placed first
+   and the pipeline stays in order within it.
+4. **Place each unit** with the same candidate ranking the leave flow uses:
+   guardrails decide who *may* do it, a weighted score orders the ones who
+   passed, and the winner is whoever finishes it earliest. Dependencies are
+   real — a pack job cannot start before its freezer trip ends.
+5. **Say what does not fit.** A run whose work finishes after it leaves is
+   `missed`, with the minutes it is short; one that finishes inside the
+   at-risk margin is `at_risk`; a run with work nobody can take is `missed`
+   too, because there is simply no plan for it.
+
+Re-planning replaces only the planner's own unstarted work. Anything a person
+added by hand, and anything already under way, survives — the agent may change
+its mind about the future, not rewrite what the floor has already done.
+
+## How a cover decision gets made
 
 `POST /leave-requests` runs the flow in `app/engine/reassignment.py`:
 
@@ -229,7 +292,8 @@ Two reply paths:
 | `GET /decisions`, `POST /decisions/{id}/override` | Audit log and manager override |
 | `GET /api/dashboard` | Everything the manager's dashboard shows, in one payload |
 | `GET /api/me/{id}` | One employee's own view — their work, their hours, nothing else |
-| `POST /api/demo/reset`, `POST /api/demo/leave` | Load and run the demo (dry run only) |
+| `GET /api/console/vocabulary`, `POST /api/console/command` | What the console understands, and one instruction |
+| `POST /api/demo/reset`, `POST /api/demo/disrupt` | Load and disrupt the demo (dry run only) |
 
 A background sweep (`app/scheduler.py`, every 60s) widens the search when a
 request times out and escalates when the pickup gets close, because silence
@@ -238,7 +302,7 @@ looks exactly like everything being fine.
 ## Testing
 
 ```bash
-.venv/bin/python -m pytest        # 146 tests
+.venv/bin/python -m pytest        # 216 tests
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
 ```
 
@@ -254,6 +318,12 @@ notifier. Worth knowing about two of them:
   take somebody out of the candidate pool.
 - `tests/test_me.py` guards the line between the two screens, including that a
   signed link opens its owner's page and refuses anybody else's.
+- `tests/test_planning.py` is mostly about order rather than arithmetic:
+  nothing is packed before it is pulled, nobody is in two places at once, work
+  only goes to people signed off for it, and a van with nothing placed against
+  it reads as missed rather than ready.
+- `tests/test_commands.py` pins the grammar, including that an unparsed
+  sentence changes nothing at all.
 
 ## Layout
 
@@ -262,9 +332,11 @@ app/engine/         decision logic — guardrails, ranking, orchestration, escal
 app/models/         SQLAlchemy models, including the audit trail
 app/api/            FastAPI routers
 app/notifications/  Notifier protocol, Slack and console implementations
-app/sim/            seeded kitchen and the three scenarios
+app/engine/planning.py  the day planner: order book → stages → who and when
+app/engine/commands.py  the console grammar: a sentence → an intent → an action
+app/sim/            seeded factory, the printed scenarios and the recorder
 app/web/            both screens: index.html, me.html, styles.css,
-                    common.js (shared), app.js, me.js
+                    common.js (shared), app.js, me.js, console.js
 tools/              build the published walkthrough from the live dashboard
 ```
 

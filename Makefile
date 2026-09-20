@@ -5,11 +5,11 @@ VENV := .venv/bin
 .PHONY: help demo test lint fmt sim replay clean
 
 help:
-	@echo "make demo     run the service with a demo kitchen loaded, and open it"
+	@echo "make demo     run the service with the factory planned, and open it"
 	@echo "make test     run the test suite"
 	@echo "make lint     ruff check and format --check"
 	@echo "make fmt      apply ruff formatting"
-	@echo "make sim      print the three decision scenarios, no server"
+	@echo "make sim      print the four decision scenarios, no server"
 	@echo "make replay   re-record snapshots and rebuild the published walkthrough"
 	@echo "make clean    remove the database, caches and build output"
 
