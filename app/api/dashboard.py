@@ -190,11 +190,50 @@ def _production_block(
         key=lambda row: -row["units"],
     )
 
+    # Per shop, line by line. The run cards answer "does the van leave on
+    # time"; this answers the other half of the job -- whether what goes on it
+    # is the right thing in the right quantity for the right address. A van
+    # that leaves at 18:00 two hundred jam donuts short is not a van that made
+    # it.
+    run_status = {row["run"]: row["status"] for row in run_rows}
+    deliveries = []
+    for order in sorted(orders, key=lambda o: (o.pickup_at, o.code)):
+        lines = [
+            {
+                "product": catalogue[line.product_id].name if line.product_id in catalogue else "?",
+                "kind": catalogue[line.product_id].kind if line.product_id in catalogue else None,
+                "ordered": line.quantity,
+                "packed": line.packed,
+                "short": line.outstanding,
+            }
+            for line in order.lines
+        ]
+        short = sum(row["short"] for row in lines)
+        run = order.destination.run if order.destination else "unassigned"
+        deliveries.append(
+            {
+                "code": order.code,
+                "where": order.where,
+                "channel": str(order.channel),
+                "run": run,
+                "departs_at": stamp(order.pickup_at, settings),
+                "ordered": order.units,
+                "short": short,
+                "complete": short == 0,
+                # A shop is only "safe" when its own lines are packed *and*
+                # the van it rides on is still going to leave on time.
+                "status": "packed" if short == 0 else run_status.get(run, "unplanned"),
+                "lines": sorted(lines, key=lambda row: -row["short"]),
+            }
+        )
+
     return {
         "cutoff": stamp(_day_cutoff(now, settings), settings),
         "runs": run_rows,
         "stages": stages,
         "remaining": remaining,
+        "deliveries": deliveries,
+        "shops_short": sum(1 for row in deliveries if not row["complete"]),
         "units_outstanding": sum(row["units"] for row in remaining),
         "units_ordered": sum(order.units for order in orders),
     }

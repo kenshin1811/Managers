@@ -133,6 +133,51 @@ def test_the_pipeline_is_reported_stage_by_stage(client, planned):
     assert sum(item["units"] for item in remaining) == production["units_outstanding"]
 
 
+def test_every_shop_is_reported_line_by_line(client, planned):
+    """The other half of the job: the right product at the right address."""
+    production = client.get("/api/dashboard").json()["production"]
+    deliveries = production["deliveries"]
+
+    assert len(deliveries) == 9
+    assert [d["departs_at"]["utc"] for d in deliveries] == sorted(
+        d["departs_at"]["utc"] for d in deliveries
+    ), "soonest van first"
+
+    fitzroy = next(d for d in deliveries if d["where"].startswith("Fitzroy"))
+    assert fitzroy["run"] == "north"
+    assert fitzroy["channel"] == "retail"
+    assert {line["product"] for line in fitzroy["lines"]} == {
+        "Jam donut",
+        "Chocolate ring",
+        "Long John",
+    }
+    assert fitzroy["short"] == sum(line["short"] for line in fitzroy["lines"])
+    assert all(line["packed"] + line["short"] == line["ordered"] for line in fitzroy["lines"])
+    assert fitzroy["lines"][0]["short"] >= fitzroy["lines"][-1]["short"], "biggest gap first"
+
+
+def test_a_shop_is_only_safe_when_its_van_is_too(client, session, settings, planned, notifier, now):
+    """Packed but riding a van that will not leave on time is not delivered."""
+    from app.engine import commands
+
+    before = client.get("/api/dashboard").json()["production"]
+    assert all(d["status"] == "on_time" for d in before["deliveries"] if not d["complete"])
+
+    commands.handle(session, settings, now, "Shaleen is off sick", notifier)
+    session.commit()
+
+    after = client.get("/api/dashboard").json()["production"]
+    stranded = [d for d in after["deliveries"] if not d["complete"] and d["status"] == "missed"]
+    assert stranded, "a shop on a late van has to read as late itself"
+
+
+def test_the_short_count_is_the_number_a_manager_would_ask_for(client, planned):
+    production = client.get("/api/dashboard").json()["production"]
+    expected = sum(1 for d in production["deliveries"] if d["short"])
+    assert production["shops_short"] == expected
+    assert 0 < production["shops_short"] <= len(production["deliveries"])
+
+
 def test_losing_a_packer_shows_up_as_vans_running_late(
     client, session, settings, planned, notifier, now
 ):

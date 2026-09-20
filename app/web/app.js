@@ -146,6 +146,58 @@ function renderRemaining(production) {
     .join("");
 }
 
+/* ---------- every shop, line by line ----------
+
+   The van cards answer "does it leave on time". This answers the other half:
+   whether what goes on it is the right thing, in the right quantity, for the
+   right address. A van that leaves at 18:00 two hundred jam donuts short is
+   not a van that made it. */
+
+function renderDeliveries(production) {
+  const rows = production.deliveries || [];
+  const short = production.shops_short || 0;
+  $("shops-note").textContent = short
+    ? `${short} of ${rows.length} still short of something. The right product, in the right quantity, at the right address.`
+    : `All ${rows.length} complete. The right product, in the right quantity, at the right address.`;
+
+  if (!rows.length) {
+    $("deliveries").innerHTML = `<p class="empty">No open orders.</p>`;
+    return;
+  }
+
+  $("deliveries").innerHTML = rows
+    .map((row) => {
+      const [cls, label] = RUN_STATUS[row.status] || ["", row.status];
+      const lines = row.lines
+        .map(
+          (line) => `
+        <div class="asked-row">
+          <div class="asked-name">${esc(line.product)}
+            <small>${line.short ? `${line.short} still to pack` : "packed"}</small></div>
+          <div class="row-side mono ${line.short ? "" : "muted"}">
+            ${line.packed.toLocaleString()} / ${line.ordered.toLocaleString()}</div>
+        </div>`
+        )
+        .join("");
+      return `
+      <article class="cover run-card fade-in">
+        <div class="cover-head">
+          <div>
+            <h3>${esc(row.where)} <span class="tag ${cls}">${esc(label)}</span></h3>
+            <p class="sub">${esc(row.code)} · ${esc(row.channel)} · ${esc(row.run)} van,
+              leaves ${esc(row.departs_at.local)}</p>
+          </div>
+          <div class="timer ${row.short ? "is-urgent" : ""}">
+            <span class="big">${row.short ? row.short.toLocaleString() : "✓"}</span>
+            ${row.short ? "units short" : "complete"}
+          </div>
+        </div>
+        <div class="asked">${lines}</div>
+      </article>`;
+    })
+    .join("");
+}
+
 /* ---------- escalations ---------- */
 
 function renderEscalations(feed) {
@@ -348,6 +400,7 @@ async function refresh() {
     renderAgent(data.agent);
     renderStats(data);
     renderRuns(data.production);
+    renderDeliveries(data.production);
     renderRemaining(data.production);
     renderEscalations(data.feed);
     renderCoverage(data.coverage);

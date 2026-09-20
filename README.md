@@ -121,8 +121,14 @@ to the wrong shop. Every command is written to the same audit log as the
 agent's own decisions, tagged with the words used and where they came from.
 
 Below that: escalations, cover requests in flight with a live countdown, the
-job board, what is left to pack by product, the decision feed with the reasons
-people were ruled out, and every person's hours against the limits.
+job board, **every shop line by line** — the right product, in the right
+quantity, at the right address, which is the half the van cards do not answer
+— what is left to pack by product, the decision feed with the reasons people
+were ruled out, and every person's hours against the limits.
+
+A shop reads as safe only when its own lines are packed *and* the van it
+rides on is still leaving on time. A van that leaves at 18:00 two hundred jam
+donuts short is not a van that made it.
 
 In dry run a demo bar appears. **Load the factory** wipes the database, seeds
 the order book timed to the current moment and lets the agent plan it — the
@@ -182,6 +188,34 @@ the roster changes.
 Re-planning replaces only the planner's own unstarted work. Anything a person
 added by hand, and anything already under way, survives — the agent may change
 its mind about the future, not rewrite what the floor has already done.
+
+## The agent watching itself
+
+Everything above reacts to an event: a leave request, a spoken command, a tap
+on a link. `app/engine/watch.py` is the part that acts on *nothing happening
+at all*, because on a packing floor that is the usual failure.
+
+Time passing is itself a change. A run that was comfortable at 16:30 is not
+comfortable at 18:20 with the same work outstanding, and nobody has pressed
+anything. So on every 60-second sweep the agent re-plans the evening
+privately, in memory, and compares its verdict to the last one it recorded.
+When a van slips from on time to at risk, or from at risk to late, it rewrites
+the board and raises one alert naming each van and when it leaves.
+
+Two things it deliberately does not do:
+
+- **It does not rewrite the board when its verdict has not changed.**
+  Committing a plan deletes and recreates the planner's rows, so re-planning
+  every minute would hand every packer a fresh set of task ids for an
+  identical board. Nothing on the floor should move because a timer fired.
+- **It does not raise the same slip twice.** A manager who gets the same alert
+  sixty times an hour stops reading any of them, and the sixty-first is the
+  one that mattered.
+
+Recovering is not an alert either — the board catches up quietly, because good
+news does not need a klaxon. And a failure inside the watch never takes the
+coverage sweep down with it: an unanswered cover request has a driver behind
+it, and that is the more urgent of the two.
 
 ## How a cover decision gets made
 
@@ -302,7 +336,7 @@ looks exactly like everything being fine.
 ## Testing
 
 ```bash
-.venv/bin/python -m pytest        # 216 tests
+.venv/bin/python -m pytest        # 231 tests
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
 ```
 
@@ -324,6 +358,9 @@ notifier. Worth knowing about two of them:
   it reads as missed rather than ready.
 - `tests/test_commands.py` pins the grammar, including that an unparsed
   sentence changes nothing at all.
+- `tests/test_watch.py` is the odd one out: it pokes the engine with *nothing*
+  and advances the clock instead, which is the harder case and the one a floor
+  actually lives in.
 
 ## Layout
 
@@ -334,6 +371,7 @@ app/api/            FastAPI routers
 app/notifications/  Notifier protocol, Slack and console implementations
 app/engine/planning.py  the day planner: order book → stages → who and when
 app/engine/commands.py  the console grammar: a sentence → an intent → an action
+app/engine/watch.py     the agent's own eye on the clock, on a 60s sweep
 app/sim/            seeded factory, the printed scenarios and the recorder
 app/web/            both screens: index.html, me.html, styles.css,
                     common.js (shared), app.js, me.js, console.js
