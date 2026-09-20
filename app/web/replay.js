@@ -24,7 +24,7 @@
     hour: "2-digit", minute: "2-digit", hour12: false,
   });
 
-  let variant = "on_shift";
+  let variant = "full_team";
   let current = data.start[variant];
   let stalledView = false;
   let beforeStalled = null;
@@ -38,11 +38,15 @@
     };
   }
 
+  /* A recorded stamp carries only its UTC value; the local strings below are
+     rendered fresh, in the reader's own browser, from the shifted moment. */
+  const STAMP_KEYS = new Set(["utc", "local", "local_full"]);
+
   /** Walk a payload and move every timestamp in it onto the reader's clock. */
   function rebase(node) {
     if (Array.isArray(node)) return node.map(rebase);
     if (node && typeof node === "object") {
-      if (typeof node.utc === "string" && "local" in node) {
+      if (typeof node.utc === "string" && Object.keys(node).every((k) => STAMP_KEYS.has(k))) {
         return stampAt(new Date(node.utc).getTime() + offsetMs);
       }
       const out = {};
@@ -109,6 +113,11 @@
     return payload;
   }
 
+  /** The key a spoken phrase is filed under, matching app.sim.capture. */
+  function normalise(transcript) {
+    return transcript.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+  }
+
   function notRecorded() {
     return new Error(
       "This is a recorded walkthrough, and that particular path was not recorded. " +
@@ -165,19 +174,42 @@
         return { plan: { task_plans: actions.map((action) => ({ action })) } };
       }
 
+      if (path === "/api/console/vocabulary") return data.vocabulary;
+
+      /* The console. Every phrase below was spoken into the real parser while
+         recording, and the answer is the sentence the engine gave back --
+         which is why the hints offer these and nothing else. */
+      if (path === "/api/console/command") {
+        const said = normalise(body.transcript || "");
+        const move = (data.commands[current] || {})[said];
+        if (!move) {
+          return {
+            ok: false,
+            kind: "unknown",
+            replanned: false,
+            speech:
+              "That one was not recorded. Try one of the suggestions below, " +
+              "or run it locally to say anything you like.",
+            detail: {},
+          };
+        }
+        current = move.next;
+        return { ok: move.ok, kind: "voice", replanned: true, speech: move.speech, detail: {} };
+      }
+
       if (path === "/api/demo/variants") {
         return {
           available: true,
           variants: {
-            on_shift: "A trained colleague is already at work",
-            call_in: "Nobody on shift can pack, so cover has to be called in",
+            full_team: "Three packers rostered: the evening fits",
+            short_team: "Two packers rostered: the vans start slipping",
           },
         };
       }
 
       if (path.startsWith("/api/demo/reset")) {
         const match = /variant=([a-z_]+)/.exec(path);
-        variant = match ? match[1] : "on_shift";
+        variant = match ? match[1] : "full_team";
         stalledView = false;
         beforeStalled = null;
         current = data.start[variant];
@@ -185,18 +217,19 @@
         return {
           variant,
           description:
-            variant === "on_shift"
-              ? "a trained colleague is already at work"
-              : "nobody on shift can pack",
+            variant === "full_team"
+              ? "three packers rostered, and the evening fits"
+              : "two packers rostered, and the vans start slipping",
         };
       }
 
-      if (path === "/api/demo/leave") {
-        const next = data.leave[current];
-        if (!next) throw new Error("Mai has already gone. Load the kitchen again to replay it.");
-        const actions = data.leave_actions[current] || [];
-        current = next;
-        return { plan: { task_plans: actions.map((action) => ({ action })) } };
+      /* The demo button and the microphone take the same route here for the
+         same reason they do on the server: if they could diverge, the button
+         would stop being evidence of anything. */
+      if (path === "/api/demo/disrupt") {
+        return this.handle("/api/console/command", {
+          body: JSON.stringify({ transcript: data.vocabulary.examples[1] }),
+        });
       }
 
       if (/^\/coverage\/\d+\/reply$/.test(path)) {

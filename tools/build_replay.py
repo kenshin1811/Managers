@@ -21,7 +21,7 @@ from pathlib import Path
 WEB = Path(__file__).resolve().parents[1] / "app" / "web"
 OUT = Path(__file__).resolve().parents[1] / "dist" / "replay.html"
 
-TITLE = "Managers Shift Agent"
+TITLE = "Packing Floor Agent"
 
 REPO = "https://github.com/kenshin1811/Managers"
 
@@ -30,11 +30,12 @@ BANNER = """
   <div class="wrap replay-banner-inner">
     <div>
       <strong>Recorded walkthrough.</strong>
-      Every figure, name, fit score and rejection reason below came out of the
-      real Python engine — this page replays what it decided, step by step.
-      Switch between the manager's screen and an employee's to see the same
-      moment from both sides. It is not talking to a live server, so it can
-      only follow paths that were recorded.
+      A donut factory's packing floor, an hour before the vans go out. Every
+      van time, fit score and rejection reason below came out of the real
+      Python engine — this page replays what it decided, step by step. Talk to
+      it in the console, or switch between the manager's screen and an
+      employee's to see the same moment from both sides.
+      It is not talking to a live server, so it only follows recorded paths.
     </div>
     <div class="replay-banner-actions">
       <div class="segmented" id="role-picker" role="radiogroup" aria-label="Whose screen">
